@@ -2,7 +2,7 @@
 import speech_recognition as sr
 
 filename='speech.wav'
-#1.Convert the format of audio from (.ogg)to (.wav)
+#1.Convert the format of audio file from (.ogg)to (.wav)
 #2.Make sure that the program file and the audio file will there in same folder
 
 r=sr.Recognizer()
