@@ -24,7 +24,7 @@
     -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-black">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">
+          <a class="navbar-brand" href="/">
               <img src="https://i.ytimg.com/vi/kVdvF3gY5lI/maxresdefault.jpg" alt="" width="100" height="50"><b>Safe<span class="text-primary">Zone</span></b>
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,10 +34,13 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               
                 <li class="nav-item">
-                    <a class="nav-link" href='#'>Dashboard</a>
+                    <a class="nav-link {% block dashboard %}{% endblock %}" href='/dashboard'><b>Dashboard</b></a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link"href='#'>Maps</a>
+                  <li class='nav-item '>
+                    <a class="nav-link {% block analysis %}{% endblock %} "href='/analysis'><b>Analysis</b></a>
+                  </li>
+                  <li class='nav-item '>
+                    <a class="nav-link {% block map %}{% endblock %} "href='/map'><b>Maps</b></a>
                   </li>
             </ul>
             <form class="d-flex">
