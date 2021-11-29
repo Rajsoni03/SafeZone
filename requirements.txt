@@ -1,0 +1,6 @@
+Django==2.2.24
+django_heroku
+pandas==0.25.2
+Werkzeug==0.15.2
+whitenoise==4.1.3
+gunicorn
