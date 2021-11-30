@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+
 # Create your views here.
 def dataInput(request):
 	return render(request, "Analysis/dataInput.html")
