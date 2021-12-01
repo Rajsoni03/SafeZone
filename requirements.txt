@@ -3,3 +3,4 @@ django_heroku
 Werkzeug
 whitenoise
 gunicorn
+SpeechRecognition
