@@ -5,7 +5,6 @@ import speech_recognition as sr
 from django.core.files.storage import default_storage
 
 
-
 rec=sr.Recognizer()
 
 
@@ -35,5 +34,17 @@ def speech2text(request):
 
 	params = {
 		'text' : text
+	}
+	return render(request, "DataEntry/dataEntry.html", params)
+
+def text2analysis(request):
+	params = {
+
+	}
+	return render(request, "DataEntry/dataEntry.html", params)
+
+def save2db(request):
+	params = {
+	
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
