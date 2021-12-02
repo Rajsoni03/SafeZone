@@ -124,7 +124,7 @@ def dataupload(request):
 			address = location.raw['address']
 
 			city = address.get('city', '')
-			zipcode = address.get('postcode', '')
+			zipcode = address.get('postcode', 0)
 			suburb = address.get('suburb', '')
 
 			print(index)
