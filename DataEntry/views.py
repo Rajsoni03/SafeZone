@@ -3,7 +3,8 @@ from django.conf import settings
 import os
 import speech_recognition as sr
 from django.core.files.storage import default_storage
-
+from .models import Crime
+from django.utils.dateparse import parse_datetime
 
 rec=sr.Recognizer()
 
@@ -44,6 +45,35 @@ def text2analysis(request):
 	return render(request, "DataEntry/dataEntry.html", params)
 
 def save2db(request):
+	if request.method == "POST":
+		eventID				= request.POST['eventID']
+		callerSource 		= request.POST['callerSource']
+		city 				= request.POST['city']
+		district 			= request.POST['district']
+		address 			= request.POST['address']
+		circle 				= request.POST['circle']
+		policeStation 		= request.POST['policeStation']
+		zipcode 			= request.POST['zipcode']
+		latitude 			= request.POST['lat']
+		longitude			= request.POST['long']
+		eventtype			= request.POST['eventtype']
+		eventsubtype		= request.POST['eventsubtype']
+		datetime			= request.POST['datetime']
+
+		Crime(eventID 		= eventID,
+			  callerSource 	= callerSource,
+			  city 			= city,
+			  district 		= district,
+			  circle 		= circle,
+			  address 		= address,
+			  policeStation = policeStation,
+			  zipcode 		= zipcode,
+			  latitude 		= latitude,
+			  longitude 	= longitude,
+			  eventtype 	= eventtype,
+			  eventsubtype 	= eventsubtype,
+			  datetime 		= parse_datetime(datetime+':00')).save()
+
 	params = {
 	
 	}
