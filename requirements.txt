@@ -4,3 +4,6 @@ Werkzeug
 whitenoise
 gunicorn
 SpeechRecognition
+pandas
+openpyxl
+geopy

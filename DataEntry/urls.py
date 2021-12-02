@@ -6,4 +6,5 @@ urlpatterns = [
 	path('speech2text', views.speech2text),
 	path('text2analysis', views.text2analysis),
 	path('save2db', views.save2db),
+	path('dataupload', views.dataupload),
 ]
