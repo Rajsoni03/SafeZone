@@ -16,6 +16,7 @@ def dataEntry(request):
 
 def speech2text(request):
 	text = ""
+	status = False
 	if (request.method == 'POST'):
 		f = request.FILES['file']
 
@@ -30,11 +31,13 @@ def speech2text(request):
 		    audio_data = rec.record(source)
 		try:  
 		    text=rec.recognize_google(audio_data)
+		    status = True
 		except Exception as e:
 		    print (e)
 
 	params = {
-		'text' : text
+		'text' : text,
+		'status' : status
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
@@ -45,6 +48,7 @@ def text2analysis(request):
 	return render(request, "DataEntry/dataEntry.html", params)
 
 def save2db(request):
+	status = False
 	if request.method == "POST":
 		eventID				= request.POST['eventID']
 		callerSource 		= request.POST['callerSource']
@@ -60,21 +64,25 @@ def save2db(request):
 		eventsubtype		= request.POST['eventsubtype']
 		datetime			= request.POST['datetime']
 
-		Crime(eventID 		= eventID,
-			  callerSource 	= callerSource,
-			  city 			= city,
-			  district 		= district,
-			  circle 		= circle,
-			  address 		= address,
-			  policeStation = policeStation,
-			  zipcode 		= zipcode,
-			  latitude 		= latitude,
-			  longitude 	= longitude,
-			  eventtype 	= eventtype,
-			  eventsubtype 	= eventsubtype,
-			  datetime 		= parse_datetime(datetime+':00')).save()
-
+		try:
+			Crime(eventID 		= eventID,
+				  callerSource 	= callerSource,
+				  city 			= city,
+				  district 		= district,
+				  circle 		= circle,
+				  address 		= address,
+				  policeStation = policeStation,
+				  zipcode 		= zipcode,
+				  latitude 		= latitude,
+				  longitude 	= longitude,
+				  eventtype 	= eventtype,
+				  eventsubtype 	= eventsubtype,
+				  datetime 		= parse_datetime(datetime+':00')).save()
+			status = True
+		except Exception as e:
+			print(e)
+			
 	params = {
-	
+		'status' : status
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
