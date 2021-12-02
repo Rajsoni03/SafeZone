@@ -5,6 +5,9 @@ import speech_recognition as sr
 from django.core.files.storage import default_storage
 from .models import Crime
 from django.utils.dateparse import parse_datetime
+import pandas as pd
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="geoapiExercises")
 
 rec=sr.Recognizer()
 
@@ -42,6 +45,14 @@ def speech2text(request):
 	return render(request, "DataEntry/dataEntry.html", params)
 
 def text2analysis(request):
+	if request.method == "POST":
+		crimes = Crime.objects.all()
+		if str(request.POST['textData']) == "delete":
+			for i in crimes:
+				i.delete()
+		else:
+			for i in crimes:
+				print(i)
 	params = {
 
 	}
@@ -86,3 +97,54 @@ def save2db(request):
 		'status' : status
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
+
+def dataupload(request):
+	crimes = Crime.objects.all()
+	if request.method == "POST":
+
+		# Save file to server
+		f = request.FILES['file']
+		with default_storage.open(f.name, 'wb+') as destination:
+		    for chunk in f.chunks():
+		        destination.write(chunk)
+
+		File_name = os.path.join(settings.MEDIA_URL, f.name)
+		cwd = os.getcwd()
+		print(cwd+File_name)
+		File_path = cwd+File_name
+
+		# read file
+		df = pd.read_csv(File_path)
+
+		for index, row in df.iterrows():
+			Latitude = str(row["Latitude"])
+			Longitude = str(row["Longitude"])
+
+			location = geolocator.reverse(Latitude+","+Longitude)
+			address = location.raw['address']
+
+			city = address.get('city', '')
+			zipcode = address.get('postcode', '')
+			suburb = address.get('suburb', '')
+
+			print(index)
+
+			Crime(eventID 		= row["Event"],
+				  callerSource 	= row["Caller Source"],
+				  city 			= city,
+				  district 		= row["District"],
+				  circle 		= row["Circle"],
+				  address 		= suburb,
+				  policeStation = row["Police Station"],
+				  zipcode 		= zipcode,
+				  latitude 		= row["Latitude"],
+				  longitude 	= row["Longitude"],
+				  eventtype 	= row["Event Type"],
+				  eventsubtype 	= row["Event Sub-Type"],
+				  datetime 		= row["Create Date/Time"]).save()
+
+		crimes = Crime.objects.all()
+	params = {
+		'len' : len(crimes)
+	}
+	return render(request, "DataEntry/dataupload.html", params)
