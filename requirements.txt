@@ -3,3 +3,7 @@ django_heroku
 Werkzeug
 whitenoise
 gunicorn
+SpeechRecognition
+pandas
+openpyxl
+geopy

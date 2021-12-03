@@ -1,0 +1,11 @@
+{% extends 'Main/base.html' %}
+{% block dataEntry %} active {% endblock %}
+{% block content %}
+<div class="container">
+    <form action="/dataEntry/dataupload" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
+        <input name="file" type="file" required />
+        <input type="submit" name="action" value="Upload File" class="btn btn-primary">
+    </form>
+    <h1>{{len}}</h1>
+</div>
+{% endblock %}

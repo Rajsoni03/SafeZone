@@ -22,4 +22,5 @@ urlpatterns = [
     path('analysis/', include('Analysis.urls')),
     path('map/', include('Map.urls')),
     # path('API/', include('API.urls')),
+    path('dataEntry/', include('DataEntry.urls')),
 ]
