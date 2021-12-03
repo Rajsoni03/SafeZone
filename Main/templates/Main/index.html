@@ -1,4 +1,5 @@
-{% include 'Main/base.html' %}
+{% extends "Main/base.html" %}
+{% block content %}
 {%load static%}
 <div
   id="carouselExampleCaptions"
@@ -115,3 +116,4 @@
     padding-right: 120px;
   }
 </style>
+{% endblock %}
