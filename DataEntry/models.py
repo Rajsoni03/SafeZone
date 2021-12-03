@@ -19,4 +19,4 @@ class Crime(models.Model):
 
     class Meta:
         ordering = ['city','policeStation','datetime']
-        # verbose_name_plural = 'study'
+        # verbose_name_plural = 'Crime'

@@ -117,31 +117,32 @@ def dataupload(request):
 		df = pd.read_csv(File_path)
 
 		for index, row in df.iterrows():
-			Latitude = str(row["Latitude"])
-			Longitude = str(row["Longitude"])
-
-			location = geolocator.reverse(Latitude+","+Longitude)
-			address = location.raw['address']
-
-			city = address.get('city', '')
-			zipcode = address.get('postcode', 0)
-			suburb = address.get('suburb', '')
-
 			print(index)
+			if len(Crime.objects.filter(eventID = row["Event"])) is 0:
+	
+				Latitude = str(row["Latitude"])
+				Longitude = str(row["Longitude"])
 
-			Crime(eventID 		= row["Event"],
-				  callerSource 	= row["Caller Source"],
-				  city 			= city,
-				  district 		= row["District"],
-				  circle 		= row["Circle"],
-				  address 		= suburb,
-				  policeStation = row["Police Station"],
-				  zipcode 		= zipcode,
-				  latitude 		= row["Latitude"],
-				  longitude 	= row["Longitude"],
-				  eventtype 	= row["Event Type"],
-				  eventsubtype 	= row["Event Sub-Type"],
-				  datetime 		= row["Create Date/Time"]).save()
+				location = geolocator.reverse(Latitude+","+Longitude)
+				address = location.raw['address']
+
+				city = address.get('city', '')
+				zipcode = address.get('postcode', 0)
+				suburb = address.get('suburb', '')
+
+				Crime(eventID 		= row["Event"],
+					  callerSource 	= row["Caller Source"],
+					  city 			= city,
+					  district 		= row["District"],
+					  circle 		= row["Circle"],
+					  address 		= suburb,
+					  policeStation = row["Police Station"],
+					  zipcode 		= zipcode,
+					  latitude 		= row["Latitude"],
+					  longitude 	= row["Longitude"],
+					  eventtype 	= row["Event Type"],
+					  eventsubtype 	= row["Event Sub-Type"],
+					  datetime 		= row["Create Date/Time"]).save()
 
 		crimes = Crime.objects.all()
 	params = {
