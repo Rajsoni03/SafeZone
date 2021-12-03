@@ -6,25 +6,26 @@ from django.http import JsonResponse
 def map(request):
 	crimes = Crime.objects.all()
 	lat_long = []
-	long_sum = 0
-	lat_sum = 0
-	num = 0
 	for crime in crimes:
 		lat_long.append([float(crime.longitude), float(crime.latitude)])
+		break
 
-		if num > 5:
-			break
-		num = num + 1
-		long_sum = long_sum + float(crime.longitude)
-		lat_sum = lat_sum + float(crime.latitude)
-
-	total_len = len(lat_long)
+	eventTypes = set()
+	for i in crimes:
+		eventTypes.add(i.eventtype)
+	eventSubTypes = set()
+	for i in crimes:
+		eventSubTypes.add(i.eventsubtype)
 	params = {
-		'lat_long' : lat_long,
-		# 'center' : [(long_sum/total_len), (lat_sum/total_len)],
+		'totalCases': len(crimes),
 		'center' : lat_long[0],
-		'first_point': lat_long[-5],
 		'map_zoom' : 13,
+		'policeStation' : 'All',
+		'circle' : 'All',
+		'todaysCases' : 0,
+		'eventTypes' : list(eventTypes),
+		'eventSubTypes' : list(eventSubTypes)
+
 	}
 	return render(request, "Map/map.html", params)
 

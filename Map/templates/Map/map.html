@@ -6,25 +6,106 @@
 <!-- Load the `mapbox-gl-geocoder` plugin. -->
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
-
 <div class="container-fluid">
     <div class="row p-0">
-        <div class="col-3 bg-dark text-light"> {{center}} <br>
-            {{lat_long}}
+        <div class="col-3 bg-dark">
+            <div class="row mx-auto mt-3">
+                <div class="card text-white bg-danger mb-2 col-6 mx-auto"  style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Crime</h5>
+                        <p class="card-text">{{totalCases}}</p>
+                    </div>
+                </div>
+                <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Police Station</h5>
+                        <p class="card-text">{{policeStation}}</p>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">PS1</a></li>
+                                <li><a class="dropdown-item" href="#">PS2</a></li>
+                                <li><a class="dropdown-item" href="#">PS3</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-white bg-success mb-2 col-6 mx-auto"  style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Circle</h5>
+                        <p class="card-text">{{circle}}</p>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">C1</a></li>
+                                <li><a class="dropdown-item" href="#">C2</a></li>
+                                <li><a class="dropdown-item" href="#">C3</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Today's Crimes</h5>
+                        <p class="card-text">{{todaysCases}}</p>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">Yesterday</a></li>
+                                <li><a class="dropdown-item" href="#">3 Days</a></li>
+                                <li><a class="dropdown-item" href="#">Week</a></li>
+                                <li><a class="dropdown-item" href="#">Month</a></li>
+                                <li><a class="dropdown-item" href="#">6 Month</a></li>
+                                <li><a class="dropdown-item" href="#">Year</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Categories</h5>
+                    <hr>
+                        <label for="eventTypes" class="form-label">Select Event Type</label>
+                        <select class="form-select" id='eventTypes'>
+                            <option selected value="all">All</option>
+                            {%for i in eventTypes%}
+                                <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
+
+                        <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
+                        <select class="form-select" id="eventSubTypes">
+                            <option selected value="all">All</option>
+                            {%for i in eventSubTypes%}
+                                <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
+
+                    <a href="#" class="btn btn-primary mt-2">Apply Filter</a>
+                </div>
+            </div>
         </div>
         <div class="col-9 p-0">
-            <div id='map' style='width: 100%; height: 93vh;'></div>
+            <div id='map' style='width: 100%; height: 92.2vh;'></div>
         </div>
     </div>
 </div>
-
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: {{center}},
-    zoom: {{map_zoom}}
+    center: {{ center }},
+    zoom: {{ map_zoom }}
 });
 
 map.on('load', function() {
@@ -41,7 +122,7 @@ map.on('load', function() {
         // Use a URL for the value for the `data` property.
         data: 'http://127.0.0.1:8080/map/dataPoints/'
     });
-         
+
     map.addLayer({
         'id': 'datapoints-layer',
         'type': 'circle',
@@ -54,9 +135,5 @@ map.on('load', function() {
         }
     });
 });
-
-
 </script>
 {% endblock %}
-
- 

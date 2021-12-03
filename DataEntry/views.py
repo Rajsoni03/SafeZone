@@ -14,7 +14,10 @@ rec=sr.Recognizer()
 
 # Create your views here.
 def dataEntry(request):
-	return render(request, "DataEntry/dataEntry.html")
+	params = {
+		'len' : len(Crime.objects.all())
+	}
+	return render(request, "DataEntry/dataEntry.html", params)
 
 
 def speech2text(request):
@@ -40,7 +43,8 @@ def speech2text(request):
 
 	params = {
 		'text' : text,
-		'status' : status
+		'status' : status,
+		'len' : len(Crime.objects.all())
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
@@ -54,7 +58,7 @@ def text2analysis(request):
 			for i in crimes:
 				print(i)
 	params = {
-
+		'len' : len(Crime.objects.all())
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
@@ -94,12 +98,12 @@ def save2db(request):
 			print(e)
 			
 	params = {
-		'status' : status
+		'status' : status,
+		'len' : len(Crime.objects.all())
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
 def dataupload(request):
-	crimes = Crime.objects.all()
 	if request.method == "POST":
 
 		# Save file to server
@@ -107,6 +111,7 @@ def dataupload(request):
 		with default_storage.open(f.name, 'wb+') as destination:
 		    for chunk in f.chunks():
 		        destination.write(chunk)
+
 
 		File_name = os.path.join(settings.MEDIA_URL, f.name)
 		cwd = os.getcwd()
@@ -143,9 +148,7 @@ def dataupload(request):
 					  eventtype 	= row["Event Type"],
 					  eventsubtype 	= row["Event Sub-Type"],
 					  datetime 		= row["Create Date/Time"]).save()
-
-		crimes = Crime.objects.all()
 	params = {
-		'len' : len(crimes)
+		'len' : len(Crime.objects.all())
 	}
-	return render(request, "DataEntry/dataupload.html", params)
+	return render(request, "DataEntry/dataEntry.html", params)
