@@ -3,13 +3,17 @@
 {% block content %}
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+<!-- Load the `mapbox-gl-geocoder` plugin. -->
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
 <div class="container-fluid">
     <div class="row p-0">
         <div class="col-3 bg-dark text-light"> {{center}} <br>
             {{lat_long}}
         </div>
         <div class="col-9 p-0">
-            <div id='map' style='width: 100%; height: 90vh;'></div>
+            <div id='map' style='width: 100%; height: 93vh;'></div>
         </div>
     </div>
 </div>
@@ -24,31 +28,35 @@ var map = new mapboxgl.Map({
 });
 
 map.on('load', function() {
+
+    map.addControl(
+        new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl
+        })
+    );
+
+    map.addSource('datapoints', {
+        type: 'geojson',
+        // Use a URL for the value for the `data` property.
+        data: 'http://127.0.0.1:8080/map/dataPoints/'
+    });
+         
     map.addLayer({
-        'id': 'lines',
-        'type': 'line',
-        'source': {
-            'type': 'geojson',
-            'data': {
-                'type': 'FeatureCollection',
-                'features': [{
-                        'type': 'Feature',
-                        'properties': {
-                            'color': '#ff0000' // 
-                        },
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates':  {{lat_long}}
-                        }
-                    }
-                ]
-            }
-        },
+        'id': 'datapoints-layer',
+        'type': 'circle',
+        'source': 'datapoints',
         'paint': {
-            'line-width': 3,
-            'line-color': ['get', 'color']
+            'circle-radius': 8,
+            'circle-stroke-width': 2,
+            'circle-color': 'red',
+            'circle-stroke-color': 'white'
         }
     });
 });
+
+
 </script>
 {% endblock %}
+
+ 
