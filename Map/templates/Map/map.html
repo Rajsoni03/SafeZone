@@ -20,52 +20,40 @@
                     <div class="card-body">
                         <h5 class="card-title">Police Station</h5>
                         <p class="card-text">{{policeStation}}</p>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Select
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">PS1</a></li>
-                                <li><a class="dropdown-item" href="#">PS2</a></li>
-                                <li><a class="dropdown-item" href="#">PS3</a></li>
-                            </ul>
-                        </div>
+                        <select class="form-select" id='policeStation'>
+                            <option selected value="all">All</option>
+                            {%for i in policeStations%}
+                                <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
                     </div>
                 </div>
                 <div class="card text-white bg-success mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
                         <h5 class="card-title">Circle</h5>
                         <p class="card-text">{{circle}}</p>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Select
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">C1</a></li>
-                                <li><a class="dropdown-item" href="#">C2</a></li>
-                                <li><a class="dropdown-item" href="#">C3</a></li>
-                            </ul>
-                        </div>
+                        <select class="form-select" id='circle'>
+                            <option selected value="all">All</option>
+                            {%for i in circles%}
+                                <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
                     </div>
                 </div>
                 <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
-                        <h5 class="card-title">Today's Crimes</h5>
-                        <p class="card-text">{{todaysCases}}</p>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Select
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">Yesterday</a></li>
-                                <li><a class="dropdown-item" href="#">3 Days</a></li>
-                                <li><a class="dropdown-item" href="#">Week</a></li>
-                                <li><a class="dropdown-item" href="#">Month</a></li>
-                                <li><a class="dropdown-item" href="#">6 Month</a></li>
-                                <li><a class="dropdown-item" href="#">Year</a></li>
-                            </ul>
-                        </div>
+                        <h5 class="card-title">Time</h5>
+                        <p class="card-text">{{time}}</p>
+                        <select class="form-select" id='time'>
+                            <option selected value="all">All</option>
+                            <option value="Today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="3days">3 Days</option>
+                            <option value="week">Week</option>
+                            <option value="month">Month</option>
+                            <option value="6month">6 Month</option>
+                            <option value="year">year</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -90,7 +78,7 @@
                             {%endfor%}
                         </select>
 
-                    <a href="#" class="btn btn-primary mt-2">Apply Filter</a>
+                    <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button> 
                 </div>
             </div>
         </div>
@@ -108,8 +96,8 @@ var map = new mapboxgl.Map({
     zoom: {{ map_zoom }}
 });
 
-map.on('load', function() {
 
+map.on('load', function (){
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -120,7 +108,7 @@ map.on('load', function() {
     map.addSource('datapoints', {
         type: 'geojson',
         // Use a URL for the value for the `data` property.
-        data: 'http://127.0.0.1:8080/map/dataPoints/'
+        data: '/map/dataPoints/'
     });
 
     map.addLayer({
@@ -135,5 +123,35 @@ map.on('load', function() {
         }
     });
 });
+
+
+function buildUrl(url, parameters){
+    var qs = "";
+    for(var key in parameters) {
+        var value = parameters[key];
+        qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+    }
+    if (qs.length > 0){
+        qs = qs.substring(0, qs.length-1); //chop off last "&"
+        url = url + "?" + qs;
+    }
+    return url;
+}
+
+
+function updateData(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation').value,
+        circle: document.getElementById('circle').value,
+        time: document.getElementById('time').value,
+        eventTypes: document.getElementById('eventTypes').value,
+        eventSubTypes: document.getElementById('eventSubTypes').value
+    };
+    var dataUrl = buildUrl('/map/dataPoints/', parameters);
+    console.log(dataUrl);
+    map.getSource('datapoints').setData(dataUrl);
+}
+
+
 </script>
 {% endblock %}
