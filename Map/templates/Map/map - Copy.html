@@ -1,175 +1,235 @@
-{% extends 'Main/base.html' %}
-{% block map %} active {% endblock %}
-{% block content %}
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Demo: Get started with the Map Matching API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Import Mapbox GL JS  -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <!-- Import Mapbox GL Draw -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css"
+      type="text/css"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
 
-#map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 30%;
-    height: 40%;
-}
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
 
-.container-fluid {
-    top: 50%;
-    left: 40%;
-    bottom: 20;
-    display: inline-block;
-    align-items: center;
-}
-</style>
-<div class="container-fluid" id="map">
+      .info-box {
+        position: absolute;
+        margin: 20px;
+        width: 25%;
+        top: 0;
+        bottom: 20px;
+        padding: 20px;
+        background-color: #fff;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Create a container for the map -->
+    <div id="map"></div>
+    <!-- Create a container for the instructions and directions -->
+    <div class="info-box">
+      <p>
+        Draw your route using the draw tools on the right. To get the most
+        accurate route match, draw points at regular intervals.
+      </p>
+      <div id="directions"></div>
+    </div>
+
     <script>
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2FjaGluLTIiLCJhIjoiY2t1d2t4dnJoMGt1OTJ3cmYzbXpuemhtMSJ9.6je_lmANBHFD6ybRCkLnuA';
-    const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-120, 50],
-        zoom: 2
-    });
+      // Add your Mapbox access token
+      mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
+      const map = new mapboxgl.Map({
+        container: 'map', // Specify the container ID
+        style: 'mapbox://styles/mapbox/streets-v11', // Specify which map style to use
+        center: [-122.42136449, 37.80176523], // Specify the starting position
+        zoom: 14.5 // Specify the starting zoom
+      });
 
-    map.on('load', () => {
-        // Add a geojson point source.
-        // Heatmap layers also work with a vector tile source.
-        map.addSource('earthquakes', {
-            'type': 'geojson',
-            'data': 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-        });
-
-        map.addLayer({
-                'id': 'earthquakes-heat',
-                'type': 'heatmap',
-                'source': 'earthquakes',
-                'maxzoom': 9,
-                'paint': {
-                    // Increase the heatmap weight based on frequency and property magnitude
-                    'heatmap-weight': [
-                        'interpolate',
-                        ['linear'],
-                        ['get', 'mag'],
-                        0,
-                        0,
-                        6,
-                        1
-                    ],
-                    // Increase the heatmap color weight weight by zoom level
-                    // heatmap-intensity is a multiplier on top of heatmap-weight
-                    'heatmap-intensity': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        0,
-                        1,
-                        9,
-                        3
-                    ],
-                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-                    // Begin color ramp at 0-stop with a 0-transparancy color
-                    // to create a blur-like effect.
-                    'heatmap-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['heatmap-density'],
-                        0,
-                        'rgba(33,102,172,0)',
-                        0.2,
-                        'rgb(103,169,207)',
-                        0.4,
-                        'rgb(209,229,240)',
-                        0.6,
-                        'rgb(253,219,199)',
-                        0.8,
-                        'rgb(239,138,98)',
-                        1,
-                        'rgb(178,24,43)'
-                    ],
-                    // Adjust the heatmap radius by zoom level
-                    'heatmap-radius': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        0,
-                        2,
-                        9,
-                        20
-                    ],
-                    // Transition from heatmap to circle layer by zoom level
-                    'heatmap-opacity': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        7,
-                        1,
-                        9,
-                        0
-                    ]
-                }
+      const draw = new MapboxDraw({
+        // Instead of showing all the draw tools, show only the line string and delete tools
+        displayControlsDefault: false,
+        controls: {
+          line_string: true,
+          trash: true
+        },
+        // Set the draw mode to draw LineStrings by default
+        defaultMode: 'draw_line_string',
+        styles: [
+          // Set the line style for the user-input coordinates
+          {
+            'id': 'gl-draw-line',
+            'type': 'line',
+            'filter': [
+              'all',
+              ['==', '$type', 'LineString'],
+              ['!=', 'mode', 'static']
+            ],
+            'layout': {
+              'line-cap': 'round',
+              'line-join': 'round'
             },
-            'waterway-label'
-        );
+            'paint': {
+              'line-color': '#438EE4',
+              'line-dasharray': [0.2, 2],
+              'line-width': 2,
+              'line-opacity': 0.7
+            }
+          },
+          // Style the vertex point halos
+          {
+            'id': 'gl-draw-polygon-and-line-vertex-halo-active',
+            'type': 'circle',
+            'filter': [
+              'all',
+              ['==', 'meta', 'vertex'],
+              ['==', '$type', 'Point'],
+              ['!=', 'mode', 'static']
+            ],
+            'paint': {
+              'circle-radius': 12,
+              'circle-color': '#FFF'
+            }
+          },
+          // Style the vertex points
+          {
+            'id': 'gl-draw-polygon-and-line-vertex-active',
+            'type': 'circle',
+            'filter': [
+              'all',
+              ['==', 'meta', 'vertex'],
+              ['==', '$type', 'Point'],
+              ['!=', 'mode', 'static']
+            ],
+            'paint': {
+              'circle-radius': 8,
+              'circle-color': '#438EE4'
+            }
+          }
+        ]
+      });
 
-        map.addLayer({
-                'id': 'earthquakes-point',
-                'type': 'circle',
-                'source': 'earthquakes',
-                'minzoom': 7,
-                'paint': {
-                    // Size circle radius by earthquake magnitude and zoom level
-                    'circle-radius': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        7,
-                        ['interpolate', ['linear'],
-                            ['get', 'mag'], 1, 1, 6, 4
-                        ],
-                        16,
-                        ['interpolate', ['linear'],
-                            ['get', 'mag'], 1, 5, 6, 50
-                        ]
-                    ],
-                    // Color circle by earthquake magnitude
-                    'circle-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['get', 'mag'],
-                        1,
-                        'rgba(33,102,172,0)',
-                        2,
-                        'rgb(103,169,207)',
-                        3,
-                        'rgb(209,229,240)',
-                        4,
-                        'rgb(253,219,199)',
-                        5,
-                        'rgb(239,138,98)',
-                        6,
-                        'rgb(178,24,43)'
-                    ],
-                    'circle-stroke-color': 'white',
-                    'circle-stroke-width': 1,
-                    // Transition from heatmap to circle layer by zoom level
-                    'circle-opacity': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        7,
-                        0,
-                        8,
-                        1
-                    ]
-                }
-            },
-            'waterway-label'
+      // Add the draw tool to the map
+      map.addControl(draw);
+
+      // Add create, update, or delete actions
+      map.on('draw.create', updateRoute);
+      map.on('draw.update', updateRoute);
+      map.on('draw.delete', removeRoute);
+
+      // Use the coordinates you just drew to make the Map Matching API request
+      function updateRoute() {
+        removeRoute(); // Overwrite any existing layers
+
+        const profile = 'driving'; // Set the profile
+
+        // Get the coordinates
+        const data = draw.getAll();
+        const lastFeature = data.features.length - 1;
+        const coords = data.features[lastFeature].geometry.coordinates;
+        // Format the coordinates
+        const newCoords = coords.join(';');
+        // Set the radius for each coordinate pair to 25 meters
+        const radius = coords.map(() => 25);
+        getMatch(newCoords, radius, profile);
+      }
+
+      // Make a Map Matching request
+      async function getMatch(coordinates, radius, profile) {
+        // Separate the radiuses with semicolons
+        const radiuses = radius.join(';');
+        // Create the query
+        const query = await fetch(
+          `https://api.mapbox.com/matching/v5/mapbox/${profile}/${coordinates}?geometries=geojson&radiuses=${radiuses}&steps=true&access_token=${mapboxgl.accessToken}`,
+          { method: 'GET' }
         );
-    });
+        const response = await query.json();
+        // Handle errors
+        if (response.code !== 'Ok') {
+          alert(
+            `${response.code} - ${response.message}.\n\nFor more information: https://docs.mapbox.com/api/navigation/map-matching/#map-matching-api-errors`
+          );
+          return;
+        }
+        const coords = response.matchings[0].geometry;
+        // Draw the route on the map
+        addRoute(coords);
+        getInstructions(response.matchings[0]);
+      }
+
+      function getInstructions(data) {
+        // Target the sidebar to add the instructions
+        const directions = document.getElementById('directions');
+        let tripDirections = '';
+        // Output the instructions for each step of each leg in the response object
+        for (const leg of data.legs) {
+          const steps = leg.steps;
+          for (const step of steps) {
+            tripDirections += `<li>${step.maneuver.instruction}</li>`;
+          }
+        }
+        directions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
+          data.duration / 60
+        )} min.</strong></p><ol>${tripDirections}</ol>`;
+      }
+
+      // Draw the Map Matching route as a new layer on the map
+      function addRoute(coords) {
+        // If a route is already loaded, remove it
+        if (map.getSource('route')) {
+          map.removeLayer('route');
+          map.removeSource('route');
+        } else {
+          map.addLayer({
+            'id': 'route',
+            'type': 'line',
+            'source': {
+              'type': 'geojson',
+              'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': coords
+              }
+            },
+            'layout': {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            'paint': {
+              'line-color': '#03AA46',
+              'line-width': 8,
+              'line-opacity': 0.8
+            }
+          });
+        }
+      }
+
+      // If the user clicks the delete draw button, remove the layer if it exists
+      function removeRoute() {
+        if (!map.getSource('route')) return;
+        map.removeLayer('route');
+        map.removeSource('route');
+      }
     </script>
-</div>
-{% endblock %}
+  </body>
+</html>
