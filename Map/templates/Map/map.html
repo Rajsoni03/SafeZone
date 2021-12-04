@@ -20,7 +20,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Police Station</h5>
                         <p class="card-text" id="policeStationVal">{{policeStation}}</p>
-                        <select class="form-select" id='policeStation'>
+                        <select class="form-select" id='policeStation' onchange="updateData()" >
                             <option selected value="All">All</option>
                             {%for i in policeStations%}
                                 <option value="{{i}}">{{i}}</option>
@@ -32,7 +32,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Circle</h5>
                         <p class="card-text" id="circleVal">{{circle}}</p>
-                        <select class="form-select" id='circle'>
+                        <select class="form-select" id='circle' onchange="updateData()" >
                             <option selected value="All">All</option>
                             {%for i in circles%}
                                 <option value="{{i}}">{{i}}</option>
@@ -44,7 +44,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Time</h5>
                         <p class="card-text" id="timeVal">{{time}}</p>
-                        <select class="form-select" id='time'>
+                        <select class="form-select" id='time' onchange="updateData()">
                             <option selected value="All">All</option>
                             <option value="Today">Today</option>
                             <option value="yesterday">Yesterday</option>
@@ -58,29 +58,44 @@
                 </div>
             </div>
 
-            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+            <div class="card mx-auto mt-2 bg-light" style="width: 98%;">
                 <div class="card-body">
                     <h5 class="card-title">Filters Event by Categories</h5>
-                    <hr>
-                        <label for="eventTypes" class="form-label">Select Event Type</label>
-                        <select class="form-select" id='eventTypes'>
-                            <option selected value="All">All</option>
-                            {%for i in eventTypes%}
-                                <option value="{{i}}">{{i}}</option>
-                            {%endfor%}
-                        </select>
+                    <!-- <hr> -->
+                    <label for="eventTypes" class="form-label">Select Event Type</label>
+                    <select class="form-select" id='eventTypes' onchange="getSubEvents ()" >
+                        <option selected value="All">All</option>
+                        {%for i in eventTypes%}
+                            <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
 
-                        <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
-                        <select class="form-select" id="eventSubTypes">
-                            <option selected value="All">All</option>
-                            {%for i in eventSubTypes%}
-                                <option value="{{i}}">{{i}}</option>
-                            {%endfor%}
-                        </select>
+                    <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
+                    <select class="form-select" id="eventSubTypes" onchange="updateData()" >
+                        <option selected value="All">All</option>
+                        {%for i in eventSubTypes%}
+                            <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
 
+            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Time</h5>
+                    <!-- <hr> -->
+                    <div class="form-group pt-2">
+                        <label for="fromdatetime" class="form-label">From Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="fromdatetime" value="{{fromDateTime}}" onchange="updateData()">
+                    </div>
+                    <div class="form-group pt-2">
+                        <label for="todatetime" class="form-label">To Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}" onchange="updateData()">
+                    </div>
                     <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button> 
                 </div>
             </div>
+
         </div>
         <div class="col-9 p-0">
             <div id='map' style='width: 100%; height: 92.2vh;'></div>
@@ -107,7 +122,6 @@ map.on('load', function (){
 
     map.addSource('datapoints', {
         type: 'geojson',
-        // Use a URL for the value for the `data` property.
         data: '/map/dataPoints/'
     });
 
@@ -132,7 +146,7 @@ function buildUrl(url, parameters){
         qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
     }
     if (qs.length > 0){
-        qs = qs.substring(0, qs.length-1); //chop off last "&"
+        qs = qs.substring(0, qs.length-1);
         url = url + "?" + qs;
     }
     return url;
@@ -145,16 +159,59 @@ function updateData(){
         circle: document.getElementById('circle').value,
         time: document.getElementById('time').value,
         eventTypes: document.getElementById('eventTypes').value,
-        eventSubTypes: document.getElementById('eventSubTypes').value
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
     };
     var dataUrl = buildUrl('/map/dataPoints/', parameters);
-    console.log(dataUrl);
+    // console.log(dataUrl);
     map.getSource('datapoints').setData(dataUrl);
     document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
     document.getElementById('circleVal').innerHTML = parameters['circle'];
     document.getElementById('timeVal').innerHTML = parameters['time'];
 }
 
+function removeAll(selectBox) {
+    while (selectBox.options.length > 0) {
+        selectBox.remove(0);
+    }
+}
+
+function getSubEvents(){
+    var parameter = {
+        eventTypes: document.getElementById('eventTypes').value
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/map/getSubEvents/', parameter);
+    // console.log(url);
+    xhr.open("GET", url, true);
+    xhr.onprogress = function(){
+        document.getElementById('eventSubTypes').disabled = true;
+    }   
+    xhr.onload = function(){
+        var selectBox = document.getElementById('eventSubTypes');
+        selectBox.disabled = false;
+
+        if (this.status == 200){            
+            var jsonResponse = xhr.response;   
+            var eventSubTypes = jsonResponse['eventSubTypes'];        
+            removeAll(selectBox);
+
+            selectBox.innerHTML = '<option selected value="All">All</option>';
+
+            for (var i=0; i<eventSubTypes.length; i++){
+                let newOption = new Option(eventSubTypes[i], eventSubTypes[i]);
+                selectBox.add(newOption,undefined);
+            }
+        }
+        else{
+            console.log("Not Working");   
+        }
+    }
+    xhr.send();
+    updateData();
+}
 
 </script>
 {% endblock %}
