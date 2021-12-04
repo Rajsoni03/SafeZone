@@ -92,9 +92,7 @@ def dataPoints(request):
 	head 			= '{"type": "FeatureCollection","features": ['
 	tail 			= ']}'
 	data_head 		= '{"type": "Feature", "geometry": { "type": "Point", "coordinates": '
-	data_tail 		= '},'
-	prop_head 		= '},"properties": { '
-	prop_tail  		= '}'
+	data_tail 		= '} },'
 
 	policeStation 	= request.GET.get('policeStation')
 	circle 			= request.GET.get('circle')
@@ -176,8 +174,7 @@ def dataPoints(request):
 
 	lat_long 		= ''
 	for crime in crimes:
-		lat_long = lat_long + data_head + str([float(crime.longitude), float(crime.latitude)]) +\
-				   prop_head + f'"eventtype": "{crime.eventtype}", "eventsubtype": "{crime.eventsubtype}", "datetime": {crime.datetime}'+ prop_tail + data_tail
+		lat_long = lat_long + data_head + str([float(crime.longitude), float(crime.latitude)]) + data_tail
 
 	data = head + lat_long + tail
 	return JsonResponse(data=eval(data))
