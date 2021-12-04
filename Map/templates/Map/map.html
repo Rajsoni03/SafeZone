@@ -86,11 +86,11 @@
                     <!-- <hr> -->
                     <div class="form-group pt-2">
                         <label for="fromdatetime" class="form-label">From Date/Time</label>
-                        <input type="datetime-local" class="form-control" id="fromdatetime" value="{{fromDateTime}}">
+                        <input type="datetime-local" class="form-control" id="fromdatetime" value="{{fromDateTime}}" onchange="updateData()">
                     </div>
                     <div class="form-group pt-2">
                         <label for="todatetime" class="form-label">To Date/Time</label>
-                        <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}">
+                        <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}" onchange="updateData()">
                     </div>
                     <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button> 
                 </div>
