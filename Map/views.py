@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from DataEntry.models import Crime
 from django.http import JsonResponse
+from datetime import datetime
+from django.utils.dateparse import parse_datetime
+now = datetime.now()
 
 # Create your views here.
 def map(request):
@@ -14,6 +17,11 @@ def map(request):
 	eventSubTypes = set()
 	policeStations = set()
 	circles = set()
+
+	fromDateTime = "2021-04-01T00:00:00"
+	toDateTime = "2021-06-30T23:59:00"
+
+	print(fromDateTime, toDateTime)
 
 	for i in crimes:
 		eventTypes.add(i.eventtype)
@@ -32,60 +40,12 @@ def map(request):
 		'eventTypes' : sorted(list(eventTypes)),
 		'eventSubTypes' : sorted(list(eventSubTypes)),
 		'policeStations' : sorted(list(policeStations)),
-		'circles': sorted(list(circles))
+		'circles': sorted(list(circles)),
+		'fromDateTime' : fromDateTime,
+		'toDateTime' : toDateTime
 
 	}
 	return render(request, "Map/map.html", params)
-
-# {
-#   "type": "FeatureCollection",
-#   "features": [
-#     {
-#       "type": "Feature",
-#       "id": 5547245399530065,
-#       "geometry": {
-#         "type": "Point",
-#         "coordinates": [-92.88969665765762, 43.991089365322296]
-#       },
-#       "properties": {
-#         "underground": "false",
-#         "extrude": "true",
-#         "height": 3,
-#         "type": "building",
-#         "min_height": 0,
-#         "iso_3166_2": "US-MN",
-#         "iso_3166_1": "US",
-#         "tilequery": {
-#           "distance": 155.91526196325026,
-#           "geometry": "polygon",
-#           "layer": "building"
-#         }
-#       }
-#     },
-#     {
-#       "type": "Feature",
-#       "id": 3017301441,
-#       "geometry": {
-#         "type": "Point",
-#         "coordinates": [-92.89943173527718, 43.985390659777266]
-#       },
-#       "properties": {
-#         "type": "service:driveway",
-#         "structure": "none",
-#         "oneway": "false",
-#         "class": "service",
-#         "iso_3166_2": "US-MN",
-#         "len": 290,
-#         "iso_3166_1": "US",
-#         "tilequery": {
-#           "distance": 849.4893375770641,
-#           "geometry": "linestring",
-#           "layer": "road"
-#         }
-#       }
-#     }
-#   ]
-# }
 
 
 def dataPoints(request):
@@ -99,37 +59,22 @@ def dataPoints(request):
 	time 			= request.GET.get('time')
 	eventTypes 		= request.GET.get('eventTypes')
 	eventSubTypes 	= request.GET.get('eventSubTypes')
+	fromDateTime	= request.GET.get('fromdatetime')
+	toDateTime	 	= request.GET.get('todatetime')
 
 	policeStation 	= None if policeStation == 'All' else policeStation
 	circle 			= None if circle 		== 'All' else circle
 	time 			= None if time 			== 'All' else time
 	eventTypes 		= None if eventTypes 	== 'All' else eventTypes
 	eventSubTypes 	= None if eventSubTypes == 'All' else eventSubTypes
+	fromDateTime	= "2021-04-01T00:00:00" if fromDateTime == None else (fromDateTime[:16] + ':00')
+	toDateTime	 	= "2021-06-30T23:59:59" if toDateTime 	== None else (toDateTime[:16] + ':59')
 
+	fromDateTime 	= parse_datetime(fromDateTime)
+	toDateTime 		= parse_datetime(toDateTime)
 
-	print('\n\n', policeStation, circle, time, eventTypes, eventSubTypes, '\n\n')
-
+	print('\n\n', policeStation, circle, time, eventTypes, eventSubTypes, '\n', fromDateTime, '\n', toDateTime, '\n\n')
 	crimes = Crime.objects.all()
-
-	# 1111
-	# 1110
-	# 1101
-	# 1100
-
-	# 1011
-	# 1010
-	# 1001
-	# 1000
-
-	# 0111
-	# 0110
-	# 0101
-	# 0100
-
-	# 0011
-	# 0010
-	# 0001
-	# 0000
  
 	if policeStation and circle and eventTypes and eventSubTypes: # 1111
 		crimes = Crime.objects.filter(policeStation=policeStation, circle=circle, eventtype=eventTypes, eventsubtype=eventSubTypes)
@@ -167,16 +112,27 @@ def dataPoints(request):
 	elif not policeStation and not circle and not eventTypes and not eventSubTypes: # 0000
 		crimes = Crime.objects.all()
 
-		
-
-
-	print(len(crimes))
-
-	lat_long 		= ''
+	lat_long = ''
 	for crime in crimes:
-		lat_long = lat_long + data_head + str([float(crime.longitude), float(crime.latitude)]) + data_tail
+		if crime.datetime >= fromDateTime and crime.datetime <= toDateTime:
+			lat_long = lat_long + data_head + str([float(crime.longitude), float(crime.latitude)]) + data_tail
 
 	data = head + lat_long + tail
 	return JsonResponse(data=eval(data))
 
+def getSubEvents(request):
+	eventTypes 		= request.GET.get('eventTypes')
+	eventTypes 		= None if eventTypes == 'All' else eventTypes
 
+	crimes = Crime.objects.filter(eventtype=eventTypes) if eventTypes else Crime.objects.all()
+	
+	eventSubTypes = set()
+	for i in crimes:
+		eventSubTypes.add(i.eventsubtype)
+
+	print(len(eventSubTypes))
+	data = {
+		'status' : True,
+		'eventSubTypes' : list(eventSubTypes)
+	}
+	return JsonResponse(data=data)
