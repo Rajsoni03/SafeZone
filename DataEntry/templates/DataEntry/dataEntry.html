@@ -4,7 +4,22 @@
 <div class="container">
     <h1 class="text-center m-3">Add New Data</h1>
     <table class="table" cellspacing="0" cellpadding="0">
-        <tr style="border-top:1px solid #dee2e6;">
+        <tr>
+            <td>Total Records in DB : </td>
+            <td>
+                <b>{{len}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td> Upload Data By CSV : </td>
+            <td>
+                <form action="/dataEntry/dataupload" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
+                    <input name="file" type="file" required />
+                    <input type="submit" name="action" value="Upload CSV File" class="btn btn-primary">
+                </form>
+            </td>
+        </tr>
+        <tr>
             <td valign=top> Select Audio WAV file : </td>
             <td valign=top>
                 <form action="/dataEntry/speech2text" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
