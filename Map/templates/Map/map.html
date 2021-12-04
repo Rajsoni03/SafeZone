@@ -19,9 +19,9 @@
                 <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
                     <div class="card-body">
                         <h5 class="card-title">Police Station</h5>
-                        <p class="card-text">{{policeStation}}</p>
+                        <p class="card-text" id="policeStationVal">{{policeStation}}</p>
                         <select class="form-select" id='policeStation'>
-                            <option selected value="all">All</option>
+                            <option selected value="All">All</option>
                             {%for i in policeStations%}
                                 <option value="{{i}}">{{i}}</option>
                             {%endfor%}
@@ -31,9 +31,9 @@
                 <div class="card text-white bg-success mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
                         <h5 class="card-title">Circle</h5>
-                        <p class="card-text">{{circle}}</p>
+                        <p class="card-text" id="circleVal">{{circle}}</p>
                         <select class="form-select" id='circle'>
-                            <option selected value="all">All</option>
+                            <option selected value="All">All</option>
                             {%for i in circles%}
                                 <option value="{{i}}">{{i}}</option>
                             {%endfor%}
@@ -43,9 +43,9 @@
                 <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
                         <h5 class="card-title">Time</h5>
-                        <p class="card-text">{{time}}</p>
+                        <p class="card-text" id="timeVal">{{time}}</p>
                         <select class="form-select" id='time'>
-                            <option selected value="all">All</option>
+                            <option selected value="All">All</option>
                             <option value="Today">Today</option>
                             <option value="yesterday">Yesterday</option>
                             <option value="3days">3 Days</option>
@@ -64,7 +64,7 @@
                     <hr>
                         <label for="eventTypes" class="form-label">Select Event Type</label>
                         <select class="form-select" id='eventTypes'>
-                            <option selected value="all">All</option>
+                            <option selected value="All">All</option>
                             {%for i in eventTypes%}
                                 <option value="{{i}}">{{i}}</option>
                             {%endfor%}
@@ -72,7 +72,7 @@
 
                         <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
                         <select class="form-select" id="eventSubTypes">
-                            <option selected value="all">All</option>
+                            <option selected value="All">All</option>
                             {%for i in eventSubTypes%}
                                 <option value="{{i}}">{{i}}</option>
                             {%endfor%}
@@ -150,6 +150,9 @@ function updateData(){
     var dataUrl = buildUrl('/map/dataPoints/', parameters);
     console.log(dataUrl);
     map.getSource('datapoints').setData(dataUrl);
+    document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
+    document.getElementById('circleVal').innerHTML = parameters['circle'];
+    document.getElementById('timeVal').innerHTML = parameters['time'];
 }
 
 
