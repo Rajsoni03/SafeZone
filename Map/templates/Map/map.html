@@ -107,7 +107,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50b
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/satellite-streets-v11',
-    center: {{ center }},
+    center: [81.03702, 26.87296],
     zoom: {{ map_zoom }}
 });
 
@@ -196,8 +196,14 @@ map.on('load', function (){
     });
     map.on('click', 'unclustered-point', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const mag = e.features[0].properties.mag;
-        const tsunami = e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+        const eventID = e.features[0].properties.eventID;
+        const eventType = e.features[0].properties.eventType;
+        const eventSubType = e.features[0].properties.eventSubType;
+        const callerSource = e.features[0].properties.callerSource;
+        const datetime = e.features[0].properties.datetime;
+        // const tsunami = e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+        // const mag = e.features[0].properties.mag;
+        // const tsunami = e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
          
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -205,7 +211,7 @@ map.on('load', function (){
          
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`).addTo(map);
+            .setHTML(`Event ID: ${eventID}<br>Event Type: ${eventType}<br>Event Sub Type: ${eventSubType}<br>Caller Source: ${callerSource}<br>Date Time: ${datetime}<br> <br> Longitude: ${e.lngLat.lng}<br>Latitude: ${e.lngLat.lat}`).addTo(map);
     });
      
     map.on('mouseenter', 'clusters', () => {
