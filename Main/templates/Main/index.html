@@ -99,36 +99,36 @@
   </div>
 </div>
 
+{% comment %} Footer beginning {% endcomment %}
+  <footer class="footer ptb-30">
+    <div class="container-fluid space">
+        <div class="row text-center">
+            <div class="col-md-3 col-6">
+              <img src="https://112.gov.in/assets/images/makeinindia.png">
+            </div>
+            <div class="col-md-3 col-6">
+                    <img src="https://112.gov.in/assets/images/digitalindia.png">
+            </div>
+            <div class="col-md-3 col-6">
+                    <img src="https://112.gov.in/assets/images/india-gov.png">
+            </div>
+            <div class="col-md-3 col-6">
+                    <img src="https://112.gov.in/assets/images/mygov.png">
+            </div>
+        </div>
+    </div>
+  </footer>
+{% comment %} Footer end {% endcomment %}
 
-
-<section class="footer">
-  <div id="l1">
-    <img src="{%static 'img10.png' %}" alt="..." />
-  </div>
-  <div id="l2">
-    <img src="{%static 'img9.png' %}" alt="..." />
-  </div>
-  <div id="l4">
-    <img src="{%static 'img11.png' %}" alt="..." />
-  </div>
-</section>
+{% comment %} Style {% endcomment %}
 <style>
   .footer {
-    text-align: center;
-    padding-bottom: 25px;
-    background-color: blanchedalmond;
-    border: 200px;
-    height: 70px;
-  }
-  #l1 {
-    float: left;
-  }
-  #l2 {
-    float: right;
-  }
-  section {
-    padding-left: 120px;
-    padding-right: 120px;
-  }
+    position: absolute;
+    bottom: 90;
+    width: 100%;
+    background-color: rgb(19,19,19);
+    padding-bottom: 8px;
+}
 </style>
+
 {% endblock %}
