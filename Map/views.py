@@ -50,9 +50,10 @@ def map(request):
 
 def dataPoints(request):
 	head 			= '{"type": "FeatureCollection","features": ['
-	tail 			= ']}'
-	data_head 		= '{"type": "Feature", "geometry": { "type": "Point", "coordinates": '
+	data_head 		= '{"type": "Feature", "properties": {'
+	data_mid        = '},  "geometry": { "type": "Point", "coordinates": '
 	data_tail 		= '} },'
+	tail 			= ']}'
 
 	policeStation 	= request.GET.get('policeStation')
 	circle 			= request.GET.get('circle')
@@ -115,9 +116,12 @@ def dataPoints(request):
 	lat_long = ''
 	for crime in crimes:
 		if crime.datetime >= fromDateTime and crime.datetime <= toDateTime:
-			lat_long = lat_long + data_head + str([float(crime.longitude), float(crime.latitude)]) + data_tail
+			prop = f'"eventID" : "{crime.eventID}", "eventType" : "{crime.eventtype}", "eventSubType" : "{crime.eventsubtype}", "callerSource": "{crime.callerSource}", "datetime": "{crime.datetime}" '
+			lat_long = lat_long + data_head + prop + data_mid + str([float(crime.longitude), float(crime.latitude)]) + data_tail
+		
 
 	data = head + lat_long + tail
+
 	return JsonResponse(data=eval(data))
 
 def getSubEvents(request):
@@ -136,3 +140,4 @@ def getSubEvents(request):
 		'eventSubTypes' : list(eventSubTypes)
 	}
 	return JsonResponse(data=data)
+

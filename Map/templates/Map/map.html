@@ -98,20 +98,42 @@
 
         </div>
         <div class="col-9 p-0">
+            <div id="stylemenu">
+                <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" checked="checked">
+                <label for="satellite-v9">satellite</label>
+                <input id="light-v10" type="radio" name="rtoggle" value="light">
+                <label for="light-v10">light</label>
+                <input id="dark-v10" type="radio" name="rtoggle" value="dark">
+                <label for="dark-v10">dark</label>
+                <input id="streets-v11" type="radio" name="rtoggle" value="streets">
+                <label for="streets-v11">streets</label>
+            </div>
             <div id='map' style='width: 100%; height: 92.2vh;'></div>
         </div>
     </div>
 </div>
+<style>
+#stylemenu {
+    position: absolute;
+    background: #efefef;
+    padding: 5px;
+    font-family: 'Open Sans', sans-serif;
+    z-index: 1;
+}
+</style>
 <script>
+
+
+// Mapbox API Setup
 mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/satellite-streets-v11',
-    center: {{ center }},
+    center: [81.03702, 26.87296],
     zoom: {{ map_zoom }}
 });
 
-
+// Load Map
 map.on('load', function (){
     map.addControl(
         new MapboxGeocoder({
@@ -120,6 +142,7 @@ map.on('load', function (){
         })
     );
 
+    // Load Json Data
     map.addSource('datapoints', {
         type: 'geojson',
         data: '/map/dataPoints/',
@@ -127,6 +150,8 @@ map.on('load', function (){
         clusterMaxZoom: 16, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
     });
+
+    // Add Dynemic Cluster Points
     map.addLayer({
         id: 'clusters',
         type: 'circle',
@@ -151,6 +176,8 @@ map.on('load', function (){
             ]
         }
     });
+
+    // Add Cases-Count on Cluster Points
     map.addLayer({
         id: 'cluster-count',
         type: 'symbol',
@@ -165,6 +192,9 @@ map.on('load', function (){
           "text-color": "#ffffff"
         }
     });
+
+
+    // Add Single Points
     map.addLayer({
         id: 'unclustered-point',
         type: 'circle',
@@ -177,7 +207,8 @@ map.on('load', function (){
             'circle-stroke-color': '#fff'
         }
     });
-
+    
+    // Mouse Click Event on Cluster Points
     map.on('click', 'clusters', (e) => {
         const features = map.queryRenderedFeatures(e.point, {
             layers: ['clusters']
@@ -194,40 +225,47 @@ map.on('load', function (){
             }
         );
     });
+
+    // Mouse Click Event on Single Points
     map.on('click', 'unclustered-point', (e) => {
+        map.flyTo({
+            center: e.features[0].geometry.coordinates
+        });
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const mag = e.features[0].properties.mag;
-        const tsunami = e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+        const eventID = e.features[0].properties.eventID;
+        const eventType = e.features[0].properties.eventType;
+        const eventSubType = e.features[0].properties.eventSubType;
+        const callerSource = e.features[0].properties.callerSource;
+        const datetime = e.features[0].properties.datetime;
+        
+        const longitude = e.features[0].geometry.coordinates[0];
+        const latitude = e.features[0].geometry.coordinates[1];
          
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
-         
-        new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`).addTo(map);
+        new mapboxgl.Popup().setLngLat(coordinates).setHTML(`Event ID: ${eventID}<br>Event Type: ${eventType}<br>Event Sub Type: ${eventSubType}<br>Caller Source: ${callerSource}<br>Date Time: ${datetime}<br> <br> Longitude: ${longitude}<br>Latitude: ${latitude}`).addTo(map);
     });
-     
+
     map.on('mouseenter', 'clusters', () => {
         map.getCanvas().style.cursor = 'pointer';
     });
     map.on('mouseleave', 'clusters', () => {
         map.getCanvas().style.cursor = '';
     });
-    // map.addLayer({
-    //     'id': 'datapoints-layer',
-    //     'type': 'circle',
-    //     'source': 'datapoints',
-    //     'paint': {
-    //         'circle-radius': 8,
-    //         'circle-stroke-width': 2,
-    //         'circle-color': 'red',
-    //         'circle-stroke-color': 'white'
-    //     }
-    // });
 });
 
+// Change Map Style
+const layerList = document.getElementById('stylemenu');
+const inputs = layerList.getElementsByTagName('input');
+for (const input of inputs) {
+    input.onclick = (layer) => {
+        const layerId = layer.target.id;
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    };
+}
 
+// Create Url Query based on Filters
 function buildUrl(url, parameters){
     var qs = "";
     for(var key in parameters) {
@@ -241,7 +279,7 @@ function buildUrl(url, parameters){
     return url;
 }
 
-
+// Update DataPoints based on Filters (Ajax inbuilt)
 function updateData(){
     var parameters = {
         policeStation: document.getElementById('policeStation').value,
@@ -260,12 +298,7 @@ function updateData(){
     document.getElementById('timeVal').innerHTML = parameters['time'];
 }
 
-function removeAll(selectBox) {
-    while (selectBox.options.length > 0) {
-        selectBox.remove(0);
-    }
-}
-
+// Update Sub Events List Based On Event Selection 
 function getSubEvents(){
     var parameter = {
         eventTypes: document.getElementById('eventTypes').value
@@ -285,7 +318,9 @@ function getSubEvents(){
         if (this.status == 200){            
             var jsonResponse = xhr.response;   
             var eventSubTypes = jsonResponse['eventSubTypes'];        
-            removeAll(selectBox);
+            while (selectBox.options.length > 0) {
+                selectBox.remove(0);
+            };
 
             selectBox.innerHTML = '<option selected value="All">All</option>';
 
