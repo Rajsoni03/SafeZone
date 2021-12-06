@@ -1,0 +1,385 @@
+{% extends 'Main/base.html' %}
+{% block analysis %} active {% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+{% load static %}
+<link rel="stylesheet" href="{%static 'Analysis/css/analysis.css'%}">
+<style type="text/css">
+.box {}
+
+.box1 {
+    background-color: #FD5E75;
+}
+
+.box2 {
+    background-color: #FCB939;
+}
+
+.box3 {
+    background-color: #24E5A3;
+}
+
+.box4 {
+    background-color: #249DF9;
+}
+</style>
+<div class="container-fluid">
+    <div class="row p-0">
+        <div class="col-3 bg-dark" style="height: 93vh">
+            <div class="row mx-auto mt-3">
+                <div class="card text-white bg-danger mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Crime</h5>
+                        <p class="card-text">{{totalCases}}</p>
+                    </div>
+                </div>
+                <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Police Station</h5>
+                        <p class="card-text" id="policeStationVal">{{policeStation}}</p>
+                        <select class="form-select" id='policeStation' onchange="updateData()">
+                            <option selected value="All">All</option>
+                            {%for i in policeStations%}
+                            <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="card text-white bg-success mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Circle</h5>
+                        <p class="card-text" id="circleVal">{{circle}}</p>
+                        <select class="form-select" id='circle' onchange="updateData()">
+                            <option selected value="All">All</option>
+                            {%for i in circles%}
+                            <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="card text-white bg-primary mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Time</h5>
+                        <p class="card-text" id="timeVal">{{time}}</p>
+                        <select class="form-select" id='time' onchange="updateData()">
+                            <option selected value="All">All</option>
+                            <option value="Today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="3days">3 Days</option>
+                            <option value="week">Week</option>
+                            <option value="month">Month</option>
+                            <option value="6month">6 Month</option>
+                            <option value="year">year</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card mx-auto mt-2 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Categories</h5>
+                    <!-- <hr> -->
+                    <label for="eventTypes" class="form-label">Select Event Type</label>
+                    <select class="form-select" id='eventTypes' onchange="getSubEvents ()">
+                        <option selected value="All">All</option>
+                        {%for i in eventTypes%}
+                        <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
+                    <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
+                    <select class="form-select" id="eventSubTypes" onchange="updateData()">
+                        <option selected value="All">All</option>
+                        {%for i in eventSubTypes%}
+                        <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Time</h5>
+                    <!-- <hr> -->
+                    <div class="form-group pt-2">
+                        <label for="fromdatetime" class="form-label">From Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="fromdatetime" value="{{fromDateTime}}" onchange="updateData()">
+                    </div>
+                    <div class="form-group pt-2">
+                        <label for="todatetime" class="form-label">To Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}" onchange="updateData()">
+                    </div>
+                    <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="row">
+                <div class="p-2 col-md-3">
+                    <div class="card text-white box shadow box1">
+                        <div class="card-body">
+                            <h3 class="card-title">Total Crime</h3>
+                            <h4 class="card-text">{{totalCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3">
+                    <div class="card text-white box shadow box2">
+                        <div class="card-body">
+                            <h3 class="card-title">Total Crime</h3>
+                            <h4 class="card-text">{{totalCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3">
+                    <div class="card text-white box shadow box3">
+                        <div class="card-body">
+                            <h3 class="card-title">Total Crime</h3>
+                            <h4 class="card-text">{{totalCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3">
+                    <div class="card text-white box shadow box4">
+                        <div class="card-body">
+                            <h3 class="card-title">Total Crime</h3>
+                            <h4 class="card-text">{{totalCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Event Type </h4>
+                        <div id="radialBarBottom"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Date </h4>
+                        <div id="line-adwords"></div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Event Type </h4>
+                        <div id="pi-chart"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Date </h4>
+                        <div id="dayColumns"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+<!-- <script src="{%static 'Analysis/js/analysis.js'%}"></script> -->
+<script type="text/javascript">
+var options = {
+    chart: {
+        height: 335,
+        type: 'radialBar',
+    },
+    plotOptions: {
+        radialBar: {
+            dataLabels: {
+                name: {
+                    fontSize: '22px',
+                },
+                value: {
+                    fontSize: '16px',
+                },
+                total: {
+                    show: true,
+                    label: 'Total',
+                    formatter: function(w) {
+                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                        return 249
+                    }
+                },
+            },
+            offsetX: -100,
+            offsetY: 0
+        }
+    },
+    stroke: {
+        lineCap: 'round'
+    },
+    series: [44, 55, 67, 83],
+    labels: ['Corona', 'Depute', 'Bananas', 'Berries'],
+    legend: {
+        show: true,
+        floating: true,
+        position: 'right',
+        offsetX: 70,
+        offsetY: 0
+    },
+};
+
+var radialBarBottom = new ApexCharts(document.querySelector("#radialBarBottom"), options);
+radialBarBottom.render();
+
+
+
+var options = {
+    series: [{
+        data: [
+            [1327359600000, 30.95],
+            [1327446000000, 31.34],
+            [1328569200000, 32.28],
+            [1328655600000, 32.10],
+            [1334268000000, 33.18],
+            [1355353200000, 35.53],
+            [1355439600000, 37.56],
+            [1355698800000, 37.42],
+            [1355785200000, 37.49],
+            [1355871600000, 38.09],
+            [1355958000000, 37.87],
+            [1356044400000, 37.71],
+            [1356303600000, 37.53],
+            [1356476400000, 37.55],
+            [1356562800000, 37.30],
+            [1358377200000, 37.73],
+            [1358463600000, 37.98],
+            [1358809200000, 37.95],
+            [1359586800000, 37.83],
+            [1359673200000, 38.34],
+        ]
+    }],
+    chart: {
+        id: 'area-datetime',
+        type: 'area',
+        height: 300,
+        zoom: {
+            autoScaleYaxis: true
+        }
+    },
+    dataLabels: {
+        enabled: false
+    },
+    markers: {
+        size: 0,
+        style: 'hollow',
+    },
+    xaxis: {
+        type: 'datetime',
+        min: new Date('01 Sep 2012').getTime(),
+        tickAmount: 6,
+    },
+    tooltip: {
+        x: {
+            format: 'dd MMM yyyy'
+        }
+    },
+    fill: {
+        type: 'gradient',
+        gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+        }
+    },
+};
+
+var chart = new ApexCharts(document.querySelector("#line-adwords"), options);
+chart.render();
+
+
+
+
+var options = {
+    chart: {
+        height: 315,
+        type: 'pie',
+    },
+    plotOptions: {
+        pie: {
+            offsetX: -50,
+            offsetY: 0
+        }
+    },
+    legend: {
+        offsetX: 70,
+        offsetY: 0
+    },
+    series: [44, 55, 13, 43, 22],
+    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            chart: {
+                width: 200
+            },
+        }
+    }]
+};
+
+var pichart = new ApexCharts(document.querySelector("#pi-chart"), options);
+pichart.render();
+
+
+var options = {
+    series: [{
+        name: 'PRODUCT A',
+        data: [44, 55, 41, 67, 22, 43, 23]
+    }, {
+        name: 'PRODUCT B',
+        data: [13, 23, 20, 8, 13, 27, 79]
+    }, {
+        name: 'PRODUCT C',
+        data: [11, 17, 15, 15, 21, 14, 11]
+    }, {
+        name: 'PRODUCT D',
+        data: [21, 7, 25, 13, 22, 8, 20]
+    }],
+    chart: {
+        type: 'bar',
+        height: 300,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        type: 'days',
+        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+            'Friday', 'Saturday', 'Sunday'
+        ],
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+var dayColumns = new ApexCharts(document.querySelector("#dayColumns"), options);
+dayColumns.render();
+</script>
+{% endblock %}
