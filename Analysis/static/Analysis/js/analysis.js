@@ -1,6 +1,7 @@
+
 var options = {
     chart: {
-        height: 387,
+        height: 335,
         type: 'radialBar',
     },
     plotOptions: {
@@ -35,7 +36,7 @@ var options = {
         floating: true,
         position: 'right',
         offsetX: 70,
-        offsetY: 30
+        offsetY: 0
     },
 };
 
@@ -72,7 +73,7 @@ var options = {
     chart: {
         id: 'area-datetime',
         type: 'area',
-        height: 350,
+        height: 300,
         zoom: {
             autoScaleYaxis: true
         }
@@ -112,11 +113,21 @@ chart.render();
 
 
 var options = {
-    series: [44, 55, 13, 43, 22],
     chart: {
-        width: 380,
+        height: 315,
         type: 'pie',
     },
+    plotOptions: {
+        pie: {
+            offsetX: -50,
+            offsetY: 0
+        }
+    },
+    legend: {
+        offsetX: 70,
+        offsetY: 0
+    },
+    series: [44, 55, 13, 43, 22],
     labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
     responsive: [{
         breakpoint: 480,
@@ -124,12 +135,69 @@ var options = {
             chart: {
                 width: 200
             },
-            legend: {
-                position: 'bottom'
-            }
         }
     }]
 };
 
-var pichart = new ApexCharts(document.querySelector("#pichart"), options);
+var pichart = new ApexCharts(document.querySelector("#pi-chart"), options);
 pichart.render();
+
+
+var options = {
+    series: [{
+        name: 'PRODUCT A',
+        data: [44, 55, 41, 67, 22, 43, 23]
+    }, {
+        name: 'PRODUCT B',
+        data: [13, 23, 20, 8, 13, 27, 79]
+    }, {
+        name: 'PRODUCT C',
+        data: [11, 17, 15, 15, 21, 14, 11]
+    }, {
+        name: 'PRODUCT D',
+        data: [21, 7, 25, 13, 22, 8, 20]
+    }],
+    chart: {
+        type: 'bar',
+        height: 300,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        type: 'days',
+        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+            'Friday', 'Saturday', 'Sunday'
+        ],
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+var dayColumns = new ApexCharts(document.querySelector("#dayColumns"), options);
+dayColumns.render();

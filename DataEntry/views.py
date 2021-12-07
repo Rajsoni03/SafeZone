@@ -51,12 +51,23 @@ def speech2text(request):
 def text2analysis(request):
 	if request.method == "POST":
 		crimes = Crime.objects.all()
-		if str(request.POST['textData']) == "delete":
+		# if str(request.POST['textData']) == "delete":
+		# 	for i in crimes:
+		# 		i.delete()
+		count = 0
+		if str(request.POST['textData']) == "removeDuplicate":
 			for i in crimes:
-				i.delete()
+				first = True
+				for j in Crime.objects.filter(eventID = i.eventID):
+					if first:
+						first = False
+					else:
+						j.delete()
+						count += 1
 		else:
 			for i in crimes:
 				print(i)
+		print("count:", count)
 	params = {
 		'len' : len(Crime.objects.all())
 	}

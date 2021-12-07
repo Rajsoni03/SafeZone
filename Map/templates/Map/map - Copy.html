@@ -1,235 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Demo: Get started with the Map Matching API</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Import Mapbox GL JS  -->
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
-    <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <!-- Import Mapbox GL Draw -->
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css"
-      type="text/css"
-    />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-      }
+<html>
+<head>
+<meta charset="utf-8">
+<title>Style lines with a data-driven property</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-122.4838, 37.8288],
+        zoom: 16
+    });
 
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
-
-      .info-box {
-        position: absolute;
-        margin: 20px;
-        width: 25%;
-        top: 0;
-        bottom: 20px;
-        padding: 20px;
-        background-color: #fff;
-        overflow-y: scroll;
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Create a container for the map -->
-    <div id="map"></div>
-    <!-- Create a container for the instructions and directions -->
-    <div class="info-box">
-      <p>
-        Draw your route using the draw tools on the right. To get the most
-        accurate route match, draw points at regular intervals.
-      </p>
-      <div id="directions"></div>
-    </div>
-
-    <script>
-      // Add your Mapbox access token
-      mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
-      const map = new mapboxgl.Map({
-        container: 'map', // Specify the container ID
-        style: 'mapbox://styles/mapbox/streets-v11', // Specify which map style to use
-        center: [-122.42136449, 37.80176523], // Specify the starting position
-        zoom: 14.5 // Specify the starting zoom
-      });
-
-      const draw = new MapboxDraw({
-        // Instead of showing all the draw tools, show only the line string and delete tools
-        displayControlsDefault: false,
-        controls: {
-          line_string: true,
-          trash: true
-        },
-        // Set the draw mode to draw LineStrings by default
-        defaultMode: 'draw_line_string',
-        styles: [
-          // Set the line style for the user-input coordinates
-          {
-            'id': 'gl-draw-line',
+    map.on('load', () => {
+        map.addSource('lines', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#F7455D' // red
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [
+                                [-122.4833858013153, 37.829607404976734],
+                                [-122.4830961227417, 37.82932776098012],
+                                [-122.4830746650696, 37.82932776098012],
+                                [-122.48218417167662, 37.82889558180985],
+                                [-122.48218417167662, 37.82890193740421],
+                                [-122.48221099376678, 37.82868372835086],
+                                [-122.4822163581848, 37.82868372835086],
+                                [-122.48205006122589, 37.82801003030873]
+                            ]
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#33C9EB' // blue
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [
+                                [-122.48393028974533, 37.829471820141016],
+                                [-122.48395174741744, 37.82940826466351],
+                                [-122.48395174741744, 37.829412501697064],
+                                [-122.48423874378203, 37.829357420242125],
+                                [-122.48422533273697, 37.829361657278575],
+                                [-122.48459815979002, 37.8293425906126],
+                                [-122.48458743095398, 37.8293447091313],
+                                [-122.4847564101219, 37.82932776098012],
+                                [-122.48474299907684, 37.829331998018276],
+                                [-122.4849334359169, 37.829298101706186],
+                                [-122.48492807149889, 37.82930022022615],
+                                [-122.48509705066681, 37.82920488676767],
+                                [-122.48509168624878, 37.82920912381288],
+                                [-122.48520433902739, 37.82905870855876],
+                                [-122.48519897460936, 37.82905870855876],
+                                [-122.4854403734207, 37.828594749716714],
+                                [-122.48543500900269, 37.82860534241688],
+                                [-122.48571664094925, 37.82808206121068],
+                                [-122.48570591211319, 37.82809689109353],
+                                [-122.4858346581459, 37.82797189627337],
+                                [-122.48582661151886, 37.82797825194729],
+                                [-122.4859634041786, 37.82788503534145],
+                                [-122.48595803976059, 37.82788927246246],
+                                [-122.48605459928514, 37.82786596829394]
+                            ]
+                        }
+                    }
+                ]
+            }
+        });
+        map.addLayer({
+            'id': 'lines',
             'type': 'line',
-            'filter': [
-              'all',
-              ['==', '$type', 'LineString'],
-              ['!=', 'mode', 'static']
-            ],
-            'layout': {
-              'line-cap': 'round',
-              'line-join': 'round'
-            },
+            'source': 'lines',
             'paint': {
-              'line-color': '#438EE4',
-              'line-dasharray': [0.2, 2],
-              'line-width': 2,
-              'line-opacity': 0.7
+                'line-width': 3,
+                // Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
+                // to set the line-color to a feature property value.
+                'line-color': ['get', 'color']
             }
-          },
-          // Style the vertex point halos
-          {
-            'id': 'gl-draw-polygon-and-line-vertex-halo-active',
-            'type': 'circle',
-            'filter': [
-              'all',
-              ['==', 'meta', 'vertex'],
-              ['==', '$type', 'Point'],
-              ['!=', 'mode', 'static']
-            ],
-            'paint': {
-              'circle-radius': 12,
-              'circle-color': '#FFF'
-            }
-          },
-          // Style the vertex points
-          {
-            'id': 'gl-draw-polygon-and-line-vertex-active',
-            'type': 'circle',
-            'filter': [
-              'all',
-              ['==', 'meta', 'vertex'],
-              ['==', '$type', 'Point'],
-              ['!=', 'mode', 'static']
-            ],
-            'paint': {
-              'circle-radius': 8,
-              'circle-color': '#438EE4'
-            }
-          }
-        ]
-      });
+        });
+    });
+</script>
 
-      // Add the draw tool to the map
-      map.addControl(draw);
-
-      // Add create, update, or delete actions
-      map.on('draw.create', updateRoute);
-      map.on('draw.update', updateRoute);
-      map.on('draw.delete', removeRoute);
-
-      // Use the coordinates you just drew to make the Map Matching API request
-      function updateRoute() {
-        removeRoute(); // Overwrite any existing layers
-
-        const profile = 'driving'; // Set the profile
-
-        // Get the coordinates
-        const data = draw.getAll();
-        const lastFeature = data.features.length - 1;
-        const coords = data.features[lastFeature].geometry.coordinates;
-        // Format the coordinates
-        const newCoords = coords.join(';');
-        // Set the radius for each coordinate pair to 25 meters
-        const radius = coords.map(() => 25);
-        getMatch(newCoords, radius, profile);
-      }
-
-      // Make a Map Matching request
-      async function getMatch(coordinates, radius, profile) {
-        // Separate the radiuses with semicolons
-        const radiuses = radius.join(';');
-        // Create the query
-        const query = await fetch(
-          `https://api.mapbox.com/matching/v5/mapbox/${profile}/${coordinates}?geometries=geojson&radiuses=${radiuses}&steps=true&access_token=${mapboxgl.accessToken}`,
-          { method: 'GET' }
-        );
-        const response = await query.json();
-        // Handle errors
-        if (response.code !== 'Ok') {
-          alert(
-            `${response.code} - ${response.message}.\n\nFor more information: https://docs.mapbox.com/api/navigation/map-matching/#map-matching-api-errors`
-          );
-          return;
-        }
-        const coords = response.matchings[0].geometry;
-        // Draw the route on the map
-        addRoute(coords);
-        getInstructions(response.matchings[0]);
-      }
-
-      function getInstructions(data) {
-        // Target the sidebar to add the instructions
-        const directions = document.getElementById('directions');
-        let tripDirections = '';
-        // Output the instructions for each step of each leg in the response object
-        for (const leg of data.legs) {
-          const steps = leg.steps;
-          for (const step of steps) {
-            tripDirections += `<li>${step.maneuver.instruction}</li>`;
-          }
-        }
-        directions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
-          data.duration / 60
-        )} min.</strong></p><ol>${tripDirections}</ol>`;
-      }
-
-      // Draw the Map Matching route as a new layer on the map
-      function addRoute(coords) {
-        // If a route is already loaded, remove it
-        if (map.getSource('route')) {
-          map.removeLayer('route');
-          map.removeSource('route');
-        } else {
-          map.addLayer({
-            'id': 'route',
-            'type': 'line',
-            'source': {
-              'type': 'geojson',
-              'data': {
-                'type': 'Feature',
-                'properties': {},
-                'geometry': coords
-              }
-            },
-            'layout': {
-              'line-join': 'round',
-              'line-cap': 'round'
-            },
-            'paint': {
-              'line-color': '#03AA46',
-              'line-width': 8,
-              'line-opacity': 0.8
-            }
-          });
-        }
-      }
-
-      // If the user clicks the delete draw button, remove the layer if it exists
-      function removeRoute() {
-        if (!map.getSource('route')) return;
-        map.removeLayer('route');
-        map.removeSource('route');
-      }
-    </script>
-  </body>
+</body>
 </html>
