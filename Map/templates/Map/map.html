@@ -9,6 +9,35 @@
 <div class="container-fluid">
     <div class="row p-0">
         <div class="col-3 bg-dark">
+            <div class="card mx-auto mt-2 bg-secondary text-white" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title ">Patrolling Points</h5>
+                    <!-- <hr> -->
+                    <label for="timeDelta" class="form-label">Based on History of </label>
+                    <select class="form-select" id='timeDelta'>
+                        <!-- <option selected value="All">All</option> -->
+                        <option value="1">1 Day</option>
+                        <option value="2">2 Day</option>
+                        <option value="3">3 Days</option>
+                        <option value="7">1 Week</option>
+                        <option value="14">2 Week</option>
+                        <option value="30">1 Month</option>
+                        <option value="60">2 Month</option>
+                    </select>
+                    <label for="noOfPoints" class="form-label mt-2">No. Of Locations</label>
+                    <select class="form-select" id="noOfPoints">
+                        <!-- <option selected value="All">All</option> -->
+                        <option value="1">1</option>
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="7">7</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                    <button onclick="getPredictionPoints()" class="btn btn-light mt-3">Predict Locations</button> 
+                </div>
+            </div>
             <div class="row mx-auto mt-3">
                 <div class="card text-white bg-danger mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
@@ -20,7 +49,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Police Station</h5>
                         <p class="card-text" id="policeStationVal">{{policeStation}}</p>
-                        <select class="form-select" id='policeStation'>
+                        <select class="form-select" id='policeStation' onchange="updateData()" >
                             <option selected value="All">All</option>
                             {%for i in policeStations%}
                                 <option value="{{i}}">{{i}}</option>
@@ -32,7 +61,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Circle</h5>
                         <p class="card-text" id="circleVal">{{circle}}</p>
-                        <select class="form-select" id='circle'>
+                        <select class="form-select" id='circle' onchange="updateData()" >
                             <option selected value="All">All</option>
                             {%for i in circles%}
                                 <option value="{{i}}">{{i}}</option>
@@ -44,7 +73,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Time</h5>
                         <p class="card-text" id="timeVal">{{time}}</p>
-                        <select class="form-select" id='time'>
+                        <select class="form-select" id='time' onchange="updateData()">
                             <option selected value="All">All</option>
                             <option value="Today">Today</option>
                             <option value="yesterday">Yesterday</option>
@@ -58,45 +87,82 @@
                 </div>
             </div>
 
-            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+            <div class="card mx-auto mt-2 bg-light" style="width: 98%;">
                 <div class="card-body">
                     <h5 class="card-title">Filters Event by Categories</h5>
-                    <hr>
-                        <label for="eventTypes" class="form-label">Select Event Type</label>
-                        <select class="form-select" id='eventTypes'>
-                            <option selected value="All">All</option>
-                            {%for i in eventTypes%}
-                                <option value="{{i}}">{{i}}</option>
-                            {%endfor%}
-                        </select>
+                    <!-- <hr> -->
+                    <label for="eventTypes" class="form-label">Select Event Type</label>
+                    <select class="form-select" id='eventTypes' onchange="getSubEvents ()" >
+                        <option selected value="All">All</option>
+                        {%for i in eventTypes%}
+                            <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
 
-                        <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
-                        <select class="form-select" id="eventSubTypes">
-                            <option selected value="All">All</option>
-                            {%for i in eventSubTypes%}
-                                <option value="{{i}}">{{i}}</option>
-                            {%endfor%}
-                        </select>
+                    <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
+                    <select class="form-select" id="eventSubTypes" onchange="updateData()" >
+                        <option selected value="All">All</option>
+                        {%for i in eventSubTypes%}
+                            <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
 
+            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Time</h5>
+                    <!-- <hr> -->
+                    <div class="form-group pt-2">
+                        <label for="fromdatetime" class="form-label">From Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="fromdatetime" value="{{fromDateTime}}" onchange="updateData()">
+                    </div>
+                    <div class="form-group pt-2">
+                        <label for="todatetime" class="form-label">To Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}" onchange="updateData()">
+                    </div>
                     <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button> 
                 </div>
             </div>
+
         </div>
         <div class="col-9 p-0">
-            <div id='map' style='width: 100%; height: 92.2vh;'></div>
+            <div id="stylemenu" hidden>
+                <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" checked="checked">
+                <label for="satellite-v9">satellite</label>
+                <input id="light-v10" type="radio" name="rtoggle" value="light">
+                <label for="light-v10">light</label>
+                <input id="dark-v10" type="radio" name="rtoggle" value="dark">
+                <label for="dark-v10">dark</label>
+                <input id="streets-v11" type="radio" name="rtoggle" value="streets">
+                <label for="streets-v11">streets</label>
+            </div>
+            <div id='map' style='width: 100%; height: 100%;'></div>
         </div>
     </div>
 </div>
+<style>
+#stylemenu {
+    position: absolute;
+    background: #efefef;
+    padding: 5px;
+    font-family: 'Open Sans', sans-serif;
+    z-index: 1;
+}
+</style>
 <script>
+
+
+// Mapbox API Setup
 mapboxgl.accessToken = 'pk.eyJ1IjoicmFqc29uaTAzIiwiYSI6ImNrNThmY25tYTA3MWwzbG50bzdndXZ5ZngifQ.-fSnHZymHAiDIUBKSuQGAQ';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: {{ center }},
+    style: 'mapbox://styles/mapbox/satellite-streets-v11',
+    center: [81.03702, 26.87296],
     zoom: {{ map_zoom }}
 });
 
-
+// Load Map
 map.on('load', function (){
     map.addControl(
         new MapboxGeocoder({
@@ -105,30 +171,237 @@ map.on('load', function (){
         })
     );
 
+
+    // Load All Points Json Data
     map.addSource('datapoints', {
         type: 'geojson',
-        // Use a URL for the value for the `data` property.
-<<<<<<< HEAD
-        data: '/map/dataPoints/'
-=======
-        data: 'https://safezoneweb.herokuapp.com/map/dataPoints/'
->>>>>>> main
+        data: '/map/dataPoints/',
+        cluster: true,
+        clusterMaxZoom: 16, // Max zoom to cluster points on
+        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
     });
 
+    // Add Dynemic Cluster Points
     map.addLayer({
-        'id': 'datapoints-layer',
-        'type': 'circle',
-        'source': 'datapoints',
-        'paint': {
-            'circle-radius': 8,
-            'circle-stroke-width': 2,
-            'circle-color': 'red',
-            'circle-stroke-color': 'white'
+        id: 'clusters',
+        type: 'circle',
+        source: 'datapoints',
+        filter: ['has', 'point_count'],
+        paint: {
+            'circle-color': [
+                'step',
+                ['get', 'point_count'],
+                '#198754', 20,
+                '#FFC107', 50,
+                '#0D6EFD', 100,
+                '#DC3545'
+                ],
+            'circle-radius': [
+                'step',
+                ['get', 'point_count'],
+                20, 20,
+                26, 50,
+                32, 100,
+                38
+            ]
         }
     });
+
+    // Add Cases-Count on Cluster Points
+    map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'datapoints',
+        filter: ['has', 'point_count'],
+        layout: {
+            'text-field': '{point_count_abbreviated}',
+            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            'text-size': 15,
+        },
+        paint: {
+          "text-color": "#ffffff"
+        }
+    });
+
+
+    // Add Single Points
+    map.addLayer({
+        id: 'unclustered-point',
+        type: 'circle',
+        source: 'datapoints',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+            'circle-color': '#11b4da',
+            'circle-radius': 10,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#fff'
+        }
+    });
+    
+    // Mouse Click Event on Cluster Points
+    map.on('click', 'clusters', (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+            layers: ['clusters']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('datapoints').getClusterExpansionZoom(
+            clusterId,
+                (err, zoom) => {
+                if (err) return;                 
+                map.easeTo({
+                    center: features[0].geometry.coordinates,
+                    zoom: zoom
+                });
+            }
+        );
+    });
+
+    // Mouse Click Event on Single Points
+    map.on('click', 'unclustered-point', (e) => {
+        map.flyTo({
+            center: e.features[0].geometry.coordinates
+        });
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const eventID = e.features[0].properties.eventID;
+        const eventType = e.features[0].properties.eventType;
+        const eventSubType = e.features[0].properties.eventSubType;
+        const callerSource = e.features[0].properties.callerSource;
+        const datetime = e.features[0].properties.datetime;
+        
+        const longitude = e.features[0].geometry.coordinates[0];
+        const latitude = e.features[0].geometry.coordinates[1];
+         
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        new mapboxgl.Popup().setLngLat(coordinates).setHTML(`Event ID: ${eventID}<br>Event Type: ${eventType}<br>Event Sub Type: ${eventSubType}<br>Caller Source: ${callerSource}<br>Date Time: ${datetime}<br> <br> Longitude: ${longitude}<br>Latitude: ${latitude}`).addTo(map);
+    });
+
+    map.on('mouseenter', 'clusters', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters', () => {
+        map.getCanvas().style.cursor = '';
+    });
+
+
+    // add routing layer / prediction points
+    // Load Json Data
+    map.addSource('predictionpoints', {
+        'type': 'geojson',
+        'data': '/map/getPrediction/'
+    });
+
+
+    const size = 200;
+
+    // This implements `StyleImageInterface`
+    // to draw a pulsing dot icon on the map.
+    const pulsingDot = {
+        width: size,
+        height: size,
+        data: new Uint8Array(size * size * 4),
+
+        // When the layer is added to the map,
+        // get the rendering context for the map canvas.
+        onAdd: function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = this.width;
+            canvas.height = this.height;
+            this.context = canvas.getContext('2d');
+        },
+
+        // Call once before every frame where the icon will be used.
+        render: function () {
+            const duration = 1000;
+            const t = (performance.now() % duration) / duration;
+
+            const radius = (size / 2) * 0.3;
+            const outerRadius = (size / 2) * 0.7 * t + radius;
+            const context = this.context;
+
+            // Draw the outer circle.
+            context.clearRect(0, 0, this.width, this.height);
+            context.beginPath();
+            context.arc(
+                this.width / 2,
+                this.height / 2,
+                outerRadius,
+                0,
+                Math.PI * 2
+            );
+            context.fillStyle = `rgba(255, 200, 200, ${1 - t})`;
+            context.fill();
+
+            // Draw the inner circle.
+            context.beginPath();
+            context.arc(
+                this.width / 2,
+                this.height / 2,
+                radius,
+                0,
+                Math.PI * 2
+            );
+            context.fillStyle = 'rgba(255, 100, 100, 1)';
+            context.strokeStyle = 'white';
+            context.lineWidth = 2 + 4 * (1 - t);
+            context.fill();
+            context.stroke();
+
+            // Update this image's data with data from the canvas.
+            this.data = context.getImageData(
+                0,
+                0,
+                this.width,
+                this.height
+            ).data;
+
+            // Continuously repaint the map, resulting
+            // in the smooth animation of the dot.
+            map.triggerRepaint();
+
+            // Return `true` to let the map know that the image was updated.
+            return true;
+        }
+    };
+
+    // map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+    // map.addLayer({
+    //     'id': 'predictionpoints-circle',
+    //     'type': 'symbol',
+    //     'source': 'predictionpoints',
+    //     'layout': {
+    //         'icon-image': 'pulsing-dot'
+    //     }
+    // });
+
+
+    map.addLayer({
+        'id': 'lines',
+        'type': 'line',
+        'source': 'predictionpoints',
+        'paint': {
+            'line-width': 3,
+            // Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
+            // to set the line-color to a feature property value.
+            'line-color': ['get', 'color']
+        }
+    });
+
+
 });
 
+// Change Map Style
+const layerList = document.getElementById('stylemenu');
+const inputs = layerList.getElementsByTagName('input');
+for (const input of inputs) {
+    input.onclick = (layer) => {
+        const layerId = layer.target.id;
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    };
+}
 
+// Create Url Query based on Filters
 function buildUrl(url, parameters){
     var qs = "";
     for(var key in parameters) {
@@ -136,24 +409,86 @@ function buildUrl(url, parameters){
         qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
     }
     if (qs.length > 0){
-        qs = qs.substring(0, qs.length-1); //chop off last "&"
+        qs = qs.substring(0, qs.length-1);
         url = url + "?" + qs;
     }
     return url;
 }
 
-
+// Update DataPoints based on Filters (Ajax inbuilt)
 function updateData(){
     var parameters = {
         policeStation: document.getElementById('policeStation').value,
         circle: document.getElementById('circle').value,
         time: document.getElementById('time').value,
         eventTypes: document.getElementById('eventTypes').value,
-        eventSubTypes: document.getElementById('eventSubTypes').value
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
     };
     var dataUrl = buildUrl('/map/dataPoints/', parameters);
-    console.log(dataUrl);
+    // console.log(dataUrl);
     map.getSource('datapoints').setData(dataUrl);
+    document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
+    document.getElementById('circleVal').innerHTML = parameters['circle'];
+    document.getElementById('timeVal').innerHTML = parameters['time'];
+}
+
+// Update Sub Events List Based On Event Selection 
+function getSubEvents(){
+    var parameter = {
+        eventTypes: document.getElementById('eventTypes').value
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/map/getSubEvents/', parameter);
+    // console.log(url);
+    xhr.open("GET", url, true);
+    xhr.onprogress = function(){
+        document.getElementById('eventSubTypes').disabled = true;
+    }   
+    xhr.onload = function(){
+        var selectBox = document.getElementById('eventSubTypes');
+        selectBox.disabled = false;
+
+        if (this.status == 200){            
+            var jsonResponse = xhr.response;   
+            var eventSubTypes = jsonResponse['eventSubTypes'];        
+            while (selectBox.options.length > 0) {
+                selectBox.remove(0);
+            };
+
+            selectBox.innerHTML = '<option selected value="All">All</option>';
+
+            for (var i=0; i<eventSubTypes.length; i++){
+                let newOption = new Option(eventSubTypes[i], eventSubTypes[i]);
+                selectBox.add(newOption,undefined);
+            }
+        }
+        else{
+            console.log("Not Working");   
+        }
+    }
+    xhr.send();
+    updateData();
+}
+
+// Get Predicted Points and Show on Map (Ajax inbuilt)
+function getPredictionPoints(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation').value,
+        circle: document.getElementById('circle').value,
+        time: document.getElementById('time').value,
+        eventTypes: document.getElementById('eventTypes').value,
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
+        timeDelta:  document.getElementById('timeDelta').value,
+        noOfPoints:  document.getElementById('noOfPoints').value,
+    };
+    var dataUrl = buildUrl('/map/getPrediction/', parameters);
+    map.getSource('predictionpoints').setData(dataUrl);
+    // console.log("getPredictionPoints")
     document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
     document.getElementById('circleVal').innerHTML = parameters['circle'];
     document.getElementById('timeVal').innerHTML = parameters['time'];
