@@ -42,12 +42,21 @@
                         <a class="nav-link {% block map %}{% endblock %} " href='/map'><b>Maps</b></a>
                     </li>
                 </ul>
-                <form class="d-flex">
+                {% comment %} Button {% endcomment %}
+                {% comment %} <form class="d-flex">
                     <button class="btn btn-outline-success" type="submit">Login</button>
-                </form>
+                </form> {% endcomment %}
             </div>
         </div>
     </nav>
+
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            font-family: sans-serif;
+        }
+    </style>
     {%block content%}
     
     {%endblock%}
