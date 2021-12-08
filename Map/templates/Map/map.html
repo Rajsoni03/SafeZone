@@ -365,15 +365,15 @@ map.on('load', function (){
         }
     };
 
-    // map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
-    // map.addLayer({
-    //     'id': 'predictionpoints-circle',
-    //     'type': 'symbol',
-    //     'source': 'predictionpoints',
-    //     'layout': {
-    //         'icon-image': 'pulsing-dot'
-    //     }
-    // });
+    map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+    map.addLayer({
+        'id': 'predictionpoints-circle',
+        'type': 'symbol',
+        'source': 'predictionpoints',
+        'layout': {
+            'icon-image': 'pulsing-dot'
+        }
+    });
 
 
     map.addLayer({
