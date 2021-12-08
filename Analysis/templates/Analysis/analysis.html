@@ -24,12 +24,12 @@
 </style>
 <div class="container-fluid">
     <div class="row p-0">
-        <div class="col-3 bg-dark" style="height: 93vh">
+        <div class="col-3 bg-dark">
             <div class="row mx-auto mt-3">
                 <div class="card text-white bg-danger mb-2 col-6 mx-auto" style="width: 48%;">
                     <div class="card-body">
                         <h5 class="card-title">Total Crime</h5>
-                        <p class="card-text">{{totalCases}}</p>
+                        <p class="card-text" id="totalCasesSide">{{totalCases}}</p>
                     </div>
                 </div>
                 <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
@@ -115,7 +115,7 @@
                     <div class="card text-white box shadow box1">
                         <div class="card-body">
                             <h3 class="card-title">Total Crime</h3>
-                            <h4 class="card-text">{{totalCases}}</h4>
+                            <h4 class="card-text" id="totalCases">{{totalCases}}</h4>
                         </div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                 <div class="col-md-5">
                     <div class="shadow mt-4">
                         <h4 class="text-center">Cases / Event Type </h4>
-                        <div id="radialBarBottom"></div>
+                        <div id="pi-chart" style="height: 364px"></div>
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -159,14 +159,26 @@
                 </div>
                 <div class="col-md-5">
                     <div class="shadow mt-4">
-                        <h4 class="text-center">Event Type </h4>
-                        <div id="pi-chart"></div>
+                        <h4 class="text-center">Cases / WeekDay </h4>
+                        <div id="radialBarBottom" style="height: 365px"></div>
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="shadow mt-4">
-                        <h4 class="text-center">Day  </h4>
+                        <h4 class="text-center">Cases / Hours</h4>
+                        <div id="hoursPlot"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases in Week By Event Type  </h4>
                         <div id="dayColumns"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases in Hours By Event Type</h4>
+                        <div id="hoursColumns"></div>
                     </div>
                 </div>
             </div>
@@ -177,136 +189,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
 <!-- <script src="{%static 'Analysis/js/analysis.js'%}"></script> -->
 <script type="text/javascript">
-var options = {
+
+var pi_options = {
     chart: {
-        height: 335,
-        type: 'radialBar',
-    },
-    plotOptions: {
-        radialBar: {
-            dataLabels: {
-                name: {
-                    fontSize: '22px',
-                },
-                value: {
-                    fontSize: '16px',
-                },
-                total: {
-                    show: true,
-                    label: 'Total',
-                    formatter: function(w) {
-                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                        return 249
-                    }
-                },
-            },
-            offsetX: -100,
-            offsetY: 0
-        }
-    },
-    stroke: {
-        lineCap: 'round'
-    },
-    series: [44, 55, 67, 83],
-    labels: ['Corona', 'Depute', 'Bananas', 'Berries'],
-    legend: {
-        show: true,
-        floating: true,
-        position: 'right',
-        offsetX: 70,
-        offsetY: 0
-    },
-};
-
-var radialBarBottom = new ApexCharts(document.querySelector("#radialBarBottom"), options);
-radialBarBottom.render();
-
-
-
-var options = {
-    series: [{
-        data: [
-            [1327359600000, 30.95],
-            [1327446000000, 31.34],
-            [1328569200000, 32.28],
-            [1328655600000, 32.10],
-            [1334268000000, 33.18],
-            [1355353200000, 35.53],
-            [1355439600000, 37.56],
-            [1355698800000, 37.42],
-            [1355785200000, 37.49],
-            [1355871600000, 38.09],
-            [1355958000000, 37.87],
-            [1356044400000, 37.71],
-            [1356303600000, 37.53],
-            [1356476400000, 37.55],
-            [1356562800000, 37.30],
-            [1358377200000, 37.73],
-            [1358463600000, 37.98],
-            [1358809200000, 37.95],
-            [1359586800000, 37.83],
-            [1359673200000, 38.34],
-        ]
-    }],
-    chart: {
-        id: 'area-datetime',
-        type: 'area',
-        height: 300,
-        zoom: {
-            autoScaleYaxis: true
-        }
-    },
-    dataLabels: {
-        enabled: false
-    },
-    markers: {
-        size: 0,
-        style: 'hollow',
-    },
-    xaxis: {
-        type: 'datetime',
-        min: new Date('01 Sep 2012').getTime(),
-        tickAmount: 6,
-    },
-    tooltip: {
-        x: {
-            format: 'dd MMM yyyy'
-        }
-    },
-    fill: {
-        type: 'gradient',
-        gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.7,
-            opacityTo: 0.9,
-            stops: [0, 100]
-        }
-    },
-};
-
-var chart = new ApexCharts(document.querySelector("#line-adwords"), options);
-chart.render();
-
-
-
-
-var options = {
-    chart: {
-        height: 315,
+        height: 380,
         type: 'pie',
     },
     plotOptions: {
         pie: {
-            offsetX: -50,
+            offsetX: 50,
             offsetY: 0
         }
     },
     legend: {
-        offsetX: 70,
+        offsetX: -100,
         offsetY: 0
     },
-    series: [44, 55, 13, 43, 22],
-    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+    series: {{pi_series}},
+    labels: {{pi_labels|safe}},
     responsive: [{
         breakpoint: 480,
         options: {
@@ -316,28 +216,74 @@ var options = {
         }
     }]
 };
-
-var pichart = new ApexCharts(document.querySelector("#pi-chart"), options);
+    
+var pichart = new ApexCharts(document.querySelector("#pi-chart"), pi_options);
 pichart.render();
+
+var options = {
+      series: [{
+      name: 'No. of Cases',
+      data: {{lineAdwords_data}}
+    }],
+      chart: {
+      height: 350,
+      type: 'bar'
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: {{lineAdwords_dates|safe}}
+    },
+    tooltip: {
+      x: {
+        format: 'dd/MM/yy'
+      },
+    },
+};
+
+var lineAdwords = new ApexCharts(document.querySelector("#line-adwords"), options);
+lineAdwords.render();
+
+
+// var options = {
+//     series: {{radialBarSeries}},
+//     labels: {{radialBarLabels|safe}},
+//       chart: {
+//       type: 'polarArea',
+//     },
+//     stroke: {
+//       colors: ['#fff']
+//     },
+//     fill: {
+//       opacity: 0.8
+//     },
+//     responsive: [{
+//       breakpoint: 480,
+//       options: {
+//         chart: {
+//           height: 200
+//         },
+//         legend: {
+//           position: 'bottom'
+//         }
+//       }
+//     }]
+// };
 
 
 var options = {
     series: [{
-        name: 'PRODUCT A',
-        data: [44, 55, 41, 67, 22, 43, 23]
-    }, {
-        name: 'PRODUCT B',
-        data: [13, 23, 20, 8, 13, 27, 79]
-    }, {
-        name: 'PRODUCT C',
-        data: [11, 17, 15, 15, 21, 14, 11]
-    }, {
-        name: 'PRODUCT D',
-        data: [21, 7, 25, 13, 22, 8, 20]
+        name: 'Total Weekly Cases',
+        data: {{radialBarSeries}},
     }],
     chart: {
         type: 'bar',
-        height: 300,
+        height: 400,
         stacked: true,
         toolbar: {
             show: true
@@ -364,9 +310,228 @@ var options = {
     },
     xaxis: {
         type: 'days',
-        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
-            'Friday', 'Saturday', 'Sunday'
-        ],
+        categories:  {{radialBarLabels|safe}},
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+
+var radialBarBottom = new ApexCharts(document.querySelector("#radialBarBottom"), options);
+radialBarBottom.render();
+
+
+
+
+var options = {
+      series: [{
+      name: 'No. of Cases',
+      data: {{hoursPlotData}}
+    }],
+      chart: {
+      height: 400,
+      type: 'bar'
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      // type: 'datetime',
+      categories: {{hoursPlotCate|safe}}
+    },
+    // tooltip: {
+    //   x: {
+    //     format: 'dd/MM/yy'
+    //   },
+    // },
+};
+
+var hoursPlot = new ApexCharts(document.querySelector("#hoursPlot"), options);
+hoursPlot.render();
+
+
+
+var options = {
+    series: [{
+        name: '12 AM',
+        data: {{hourEvent.0}}
+    }, {
+        name: '1 AM',
+        data: {{hourEvent.1}}
+    }, {
+        name: '2 AM',
+        data: {{hourEvent.2}}
+    }, {
+        name: '3 AM',
+        data: {{hourEvent.3}}
+    }, {
+        name: '4 AM',
+        data: {{hourEvent.4}}
+    }, {
+        name: '5 AM',
+        data: {{hourEvent.5}}
+    }, {
+        name: '6 AM',
+        data: {{hourEvent.6}}
+    }, {
+        name: '7 AM',
+        data: {{hourEvent.7}}
+    }, {
+        name: '8 AM',
+        data: {{hourEvent.8}}
+    }, {
+        name: '9 AM',
+        data: {{hourEvent.9}}
+    }, {
+        name: '10 AM',
+        data: {{hourEvent.10}}
+    }, {
+        name: '11 AM',
+        data: {{hourEvent.11}}
+    }, {
+        name: '12 PM',
+        data: {{hourEvent.12}}
+    }, {
+        name: '1 PM',
+        data: {{hourEvent.13}}
+    }, {
+        name: '2 PM',
+        data: {{hourEvent.14}}
+    }, {
+        name: '3 PM',
+        data: {{hourEvent.15}}
+    }, {
+        name: '4 PM',
+        data: {{hourEvent.16}}
+    }, {
+        name: '5 PM',
+        data: {{hourEvent.17}}
+    }, {
+        name: '6 PM',
+        data: {{hourEvent.18}}
+    }, {
+        name: '7 PM',
+        data: {{hourEvent.19}}
+    }, {
+        name: '8 PM',
+        data: {{hourEvent.20}}
+    }, {
+        name: '9 PM',
+        data: {{hourEvent.21}}
+    }, {
+        name: '10 PM',
+        data: {{hourEvent.22}}
+    }, {
+        name: '11 PM',
+        data: {{hourEvent.23}}
+    }
+    ],
+    chart: {
+        type: 'bar',
+        height: 500,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        // type: 'days',
+        categories: {{WeekEventIndex|safe}},
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+var dayColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
+dayColumns.render();
+
+
+
+var options = {
+    series: [{
+        name: 'Monday',
+        data: {{WeekEventMonday}}
+    }, {
+        name: 'Tuesday',
+        data: {{WeekEventTuesday}}
+    }, {
+        name: 'Wednesday',
+        data: {{WeekEventWednesday}}
+    }, {
+        name: 'Thursday',
+        data: {{WeekEventThursday}}
+    }, {
+        name: 'Friday',
+        data: {{WeekEventFriday}}
+    }, {
+        name: 'Saturday',
+        data: {{WeekEventSaturday}}
+    }, {
+        name: 'Sunday',
+        data: {{WeekEventSunday}}
+    }],
+    chart: {
+        type: 'bar',
+        height: 500,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        type: 'days',
+        categories: {{WeekEventIndex|safe}},
     },
     legend: {
         position: 'right',
@@ -379,5 +544,107 @@ var options = {
 
 var dayColumns = new ApexCharts(document.querySelector("#dayColumns"), options);
 dayColumns.render();
+
+
+
+
+
+// Create Url Query based on Filters
+function buildUrl(url, parameters){
+    var qs = "";
+    for(var key in parameters) {
+        var value = parameters[key];
+        qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+    }
+    if (qs.length > 0){
+        qs = qs.substring(0, qs.length-1);
+        url = url + "?" + qs;
+    }
+    return url;
+}
+
+// Update Sub Events List Based On Event Selection 
+function getSubEvents(){
+    var parameter = {
+        eventTypes: document.getElementById('eventTypes').value
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/map/getSubEvents/', parameter);
+    // console.log(url);
+    xhr.open("GET", url, true);
+    xhr.onprogress = function(){
+        document.getElementById('eventSubTypes').disabled = true;
+    }   
+    xhr.onload = function(){
+        var selectBox = document.getElementById('eventSubTypes');
+        selectBox.disabled = false;
+
+        if (this.status == 200){            
+            var jsonResponse = xhr.response;   
+            var eventSubTypes = jsonResponse['eventSubTypes'];        
+            while (selectBox.options.length > 0) {
+                selectBox.remove(0);
+            };
+
+            selectBox.innerHTML = '<option selected value="All">All</option>';
+
+            for (var i=0; i<eventSubTypes.length; i++){
+                let newOption = new Option(eventSubTypes[i], eventSubTypes[i]);
+                selectBox.add(newOption,undefined);
+            }
+        }
+        else{
+            console.log("Not Working");   
+        }
+    }
+    xhr.send();
+    updateData();
+}
+
+// Update DataPoints based on Filters (Ajax inbuilt)
+function updateData(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation').value,
+        circle: document.getElementById('circle').value,
+        time: document.getElementById('time').value,
+        eventTypes: document.getElementById('eventTypes').value,
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
+    };
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/analysis/getData/', parameters);
+    xhr.open("GET", url, true);
+
+    xhr.onprogress = function(){
+        // document.getElementById('eventSubTypes').disabled = true;
+    }
+    xhr.onload = function(){
+        var jsonResponse = xhr.response;   
+
+        // Update No. of cases
+        var totalCases = jsonResponse['totalCases'];  
+        document.getElementById('totalCases').innerHTML = totalCases;
+        document.getElementById('totalCasesSide').innerHTML = totalCases;
+
+        // Update Pi Chart Value
+        // pi_options['series'] = jsonResponse['pi_series'];  
+        // pi_options['labels'] = jsonResponse['pi_labels'];  
+
+        // dayColumns
+
+    }
+    xhr.send();
+
+    console.log(url);
+    // map.getSource('datapoints').setData(dataUrl);
+    document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
+    document.getElementById('circleVal').innerHTML = parameters['circle'];
+    document.getElementById('timeVal').innerHTML = parameters['time'];
+}
+
+
 </script>
 {% endblock %}
