@@ -36,7 +36,7 @@ def map(request):
 		'center' : lat_long[0],
 		'map_zoom' : 12,
 		'policeStation' : 'All',
-		'time': "All",
+		'radius': "All",
 		'circle' : 'All',
 		'todaysCases' : 0,
 		'eventTypes' : sorted(list(eventTypes)),
@@ -67,7 +67,7 @@ def dataPoints(request):
 
 	policeStation 	= None if policeStation == 'All' else policeStation
 	circle 			= None if circle 		== 'All' else circle
-	radius 			= None if radius 			== 'All' else radius
+	radius 			= None if radius 		== 'All' else radius
 	eventTypes 		= None if eventTypes 	== 'All' else eventTypes
 	eventSubTypes 	= None if eventSubTypes == 'All' else eventSubTypes
 	fromDateTime	= "2021-04-01T00:00:00" if fromDateTime == None else (fromDateTime[:16] + ':00')
@@ -112,15 +112,43 @@ def dataPoints(request):
 		crimes = Crime.objects.filter(eventtype=eventTypes)
 	elif not policeStation and not circle and not eventTypes and eventSubTypes: # 0001
 		crimes = Crime.objects.filter(eventsubtype=eventSubTypes)
-	elif not policeStation and not circle and not eventTypes and not eventSubTypes: # 0000
-		crimes = Crime.objects.all()
+	# elif not policeStation and not circle and not eventTypes and not eventSubTypes: # 0000
+	# 	crimes = Crime.objects.all()
+
+	PS = {
+		"PS1" : [26.835, 81.023],
+		"PS2" : [26.850, 80.992],
+		"PS3" : [26.900, 81.048],
+		"PS4" : [26.865, 81.014]
+	}
+
+	if radius:
+		radius = int(radius) * 0.005
 
 	lat_long = ''
 	for crime in crimes:
-		if crime.datetime >= fromDateTime and crime.datetime <= toDateTime:
+		ThisLatitude = float(crime.latitude)
+		ThisLongitude = float(crime.longitude)
+		isRadius = True
+		if radius:
+			isRadius = False
+			if policeStation is None:
+				for ps in PS.keys():
+					if (ThisLatitude >= PS[ps][0] - radius) and (ThisLongitude >= PS[ps][1] - radius) and (ThisLatitude <= PS[ps][0] + radius) and (ThisLongitude <= PS[ps][1] + radius):
+						isRadius = True				
+			else:
+				if (ThisLatitude >= PS[policeStation][0] - radius) and (ThisLongitude >= PS[policeStation][1] - radius) and (ThisLatitude <= PS[policeStation][0] + radius) and (ThisLongitude <= PS[policeStation][1] + radius):
+						isRadius = True				
+
+
+		if crime.datetime >= fromDateTime and crime.datetime <= toDateTime and isRadius:
 			prop = f'"eventID" : "{crime.eventID}", "eventType" : "{crime.eventtype}", "eventSubType" : "{crime.eventsubtype}", "callerSource": "{crime.callerSource}", "datetime": "{crime.datetime}" '
-			lat_long = lat_long + data_head + prop + data_mid + str([float(crime.longitude), float(crime.latitude)]) + data_tail
+			lat_long = lat_long + data_head + prop + data_mid + str([ThisLongitude, ThisLatitude]) + data_tail
 		
+		# else:
+		# 	if crime.datetime >= fromDateTime and crime.datetime <= toDateTime:
+		# 		prop = f'"eventID" : "{crime.eventID}", "eventType" : "{crime.eventtype}", "eventSubType" : "{crime.eventsubtype}", "callerSource": "{crime.callerSource}", "datetime": "{crime.datetime}" '
+		# 		lat_long = lat_long + data_head + prop + data_mid + str([float(crime.longitude), float(crime.latitude)]) + data_tail
 
 	data = head + lat_long + tail
 

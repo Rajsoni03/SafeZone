@@ -122,7 +122,7 @@ def dataInput(request):
 	params = {
 		'totalCases': len(crimes),
 		'policeStation' : 'All',
-		'time': "All",
+		'radius': "All",
 		'circle' : 'All',
 		'todaysCases' : 0,
 		'eventTypes' : sorted(df['eventType'].unique()),
@@ -161,7 +161,7 @@ def getData(request):
 
 	policeStation 	= request.GET.get('policeStation')
 	circle 			= request.GET.get('circle')
-	time 			= request.GET.get('time')
+	radius 			= request.GET.get('radius')
 	eventTypes 		= request.GET.get('eventTypes')
 	eventSubTypes 	= request.GET.get('eventSubTypes')
 	fromDateTime	= request.GET.get('fromdatetime')
@@ -169,7 +169,7 @@ def getData(request):
 
 	policeStation 	= None if policeStation == 'All' else policeStation
 	circle 			= None if circle 		== 'All' else circle
-	time 			= None if time 			== 'All' else time
+	radius 			= None if radius 		== 'All' else radius
 	eventTypes 		= None if eventTypes 	== 'All' else eventTypes
 	eventSubTypes 	= None if eventSubTypes == 'All' else eventSubTypes
 	fromDateTime	= "2021-04-01T00:00:00" if fromDateTime == None else (fromDateTime[:16] + ':00')
@@ -178,7 +178,7 @@ def getData(request):
 	fromDateTime 	= parse_datetime(fromDateTime)
 	toDateTime 		= parse_datetime(toDateTime)
 
-	print('\n All Points \n', policeStation, circle, time, eventTypes, eventSubTypes, '\n', fromDateTime, '\n', toDateTime, '\n\n')
+	print('\n All Points \n', policeStation, circle, radius, eventTypes, eventSubTypes, '\n', fromDateTime, '\n', toDateTime, '\n\n')
 
 	crimes = []
 
