@@ -3,7 +3,7 @@ from DataEntry.models import Crime
 from django.http import JsonResponse
 from datetime import date, timedelta, datetime
 from django.utils.dateparse import parse_datetime
-from math import sqrt
+from math import sin, cos, asin, sqrt, degrees, radians
 import pandas as pd
 now = datetime.now()
 
@@ -59,7 +59,7 @@ def dataPoints(request):
 
 	policeStation 	= request.GET.get('policeStation')
 	circle 			= request.GET.get('circle')
-	time 			= request.GET.get('time')
+	radius 			= request.GET.get('radius')
 	eventTypes 		= request.GET.get('eventTypes')
 	eventSubTypes 	= request.GET.get('eventSubTypes')
 	fromDateTime	= request.GET.get('fromdatetime')
@@ -67,7 +67,7 @@ def dataPoints(request):
 
 	policeStation 	= None if policeStation == 'All' else policeStation
 	circle 			= None if circle 		== 'All' else circle
-	time 			= None if time 			== 'All' else time
+	radius 			= None if radius 			== 'All' else radius
 	eventTypes 		= None if eventTypes 	== 'All' else eventTypes
 	eventSubTypes 	= None if eventSubTypes == 'All' else eventSubTypes
 	fromDateTime	= "2021-04-01T00:00:00" if fromDateTime == None else (fromDateTime[:16] + ':00')
@@ -76,7 +76,7 @@ def dataPoints(request):
 	fromDateTime 	= parse_datetime(fromDateTime)
 	toDateTime 		= parse_datetime(toDateTime)
 
-	print('\n All Points \n', policeStation, circle, time, eventTypes, eventSubTypes, '\n', fromDateTime, '\n', toDateTime, '\n\n')
+	print('\n All Points \n', policeStation, circle, radius, eventTypes, eventSubTypes, '\n', fromDateTime, '\n', toDateTime, '\n\n')
 	crimes = Crime.objects.all()
  
 	if policeStation and circle and eventTypes and eventSubTypes: # 1111
@@ -153,7 +153,7 @@ def getPrediction(request):
 		# Get Request Data 
 		policeStation 	= request.GET.get('policeStation')
 		circle 			= request.GET.get('circle')
-		time 			= request.GET.get('time')
+		radius 			= request.GET.get('radius')
 		eventTypes 		= request.GET.get('eventTypes')
 		eventSubTypes 	= request.GET.get('eventSubTypes')
 		fromDateTime	= request.GET.get('fromdatetime')
@@ -162,7 +162,7 @@ def getPrediction(request):
 		# Handle Null values
 		policeStation 	= None if policeStation == 'All' else policeStation
 		circle 			= None if circle 		== 'All' else circle
-		time 			= None if time 			== 'All' else time
+		radius 			= None if radius 			== 'All' else radius
 		eventTypes 		= None if eventTypes 	== 'All' else eventTypes
 		eventSubTypes 	= None if eventSubTypes == 'All' else eventSubTypes
 		fromDateTime	= "2021-04-01T00:00:00" if fromDateTime == None else (fromDateTime[:16] + ':00')
@@ -171,7 +171,7 @@ def getPrediction(request):
 		fromDateTime 	= parse_datetime(fromDateTime)
 		toDateTime 		= parse_datetime(toDateTime)
 
-		print('\n Predictions \n', policeStation, circle, time, eventTypes, eventSubTypes, timeDelta, noOfPoints, '\n', fromDateTime, '\n', toDateTime, '\n\n')
+		print('\n Predictions \n', policeStation, circle, radius, eventTypes, eventSubTypes, timeDelta, noOfPoints, '\n', fromDateTime, '\n', toDateTime, '\n\n')
 		crimes = Crime.objects.all()
 	 
 		if policeStation and circle and eventTypes and eventSubTypes: # 1111
