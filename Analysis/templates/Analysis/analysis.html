@@ -114,7 +114,7 @@
                 <div class="p-2 col-md-3">
                     <div class="card text-white box shadow box1">
                         <div class="card-body">
-                            <h3 class="card-title">Total Crime</h3>
+                            <h3 class="card-title">Total Crimes</h3>
                             <h4 class="card-text" id="totalCases">{{totalCases}}</h4>
                         </div>
                     </div>
@@ -122,16 +122,16 @@
                 <div class="p-2 col-md-3">
                     <div class="card text-white box shadow box2">
                         <div class="card-body">
-                            <h3 class="card-title">Total Crime</h3>
-                            <h4 class="card-text">{{totalCases}}</h4>
+                            <h3 class="card-title">1 Month Crimes</h3>
+                            <h4 class="card-text" id="monthCases">{{monthCases}}</h4>
                         </div>
                     </div>
                 </div>
                 <div class="p-2 col-md-3">
                     <div class="card text-white box shadow box3">
                         <div class="card-body">
-                            <h3 class="card-title">Total Crime</h3>
-                            <h4 class="card-text">{{totalCases}}</h4>
+                            <h3 class="card-title">1 Week Crimes</h3>
+                            <h4 class="card-text" id="weekCases">{{weekCases}}</h4>
                         </div>
                     </div>
                 </div>
@@ -628,6 +628,8 @@ function updateData(){
         var totalCases = jsonResponse['totalCases'];  
         document.getElementById('totalCases').innerHTML = totalCases;
         document.getElementById('totalCasesSide').innerHTML = totalCases;
+        document.getElementById('monthCases').innerHTML = jsonResponse["monthCases"];
+        document.getElementById('weekCases').innerHTML = jsonResponse["weekCases"];
 
         // Update Pi Chart Value
         // pi_options['series'] = jsonResponse['pi_series'];  

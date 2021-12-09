@@ -49,7 +49,7 @@ def dataInput(request):
 	    'series': [i for i in df['eventType'].value_counts()[:10].values],
 	    'labels': [str(i) for i in df['eventType'].value_counts()[:10].index],
 	}
-	print(pi_data['labels'])
+	# print(pi_data['labels'])
 
 
 	# lineAdwords chart data (datetime and cases)
@@ -108,7 +108,7 @@ def dataInput(request):
 		hourEvent[i] = []
 
 	for i in df['eventType'].value_counts()[:10].index:
-		temp_df = (df[df['eventType'] == i])['hour'].value_counts(normalize=True)
+		temp_df = (df[df['eventType'] == i])['hour'].value_counts()#normalize=True
 		hoursEvent_Type.append(i)    
 		for i in hourEvent.keys():
 			try:
@@ -116,14 +116,13 @@ def dataInput(request):
 			except:
 				hourEvent[i].append(0)
 
-	print(hourEvent)
-
 
 	params = {
 		'totalCases': len(crimes),
 		'policeStation' : 'All',
 		'radius': "All",
 		'circle' : 'All',
+		'time': "All",
 		'todaysCases' : 0,
 		'eventTypes' : sorted(df['eventType'].unique()),
 		'eventSubTypes' : sorted(df['eventSubType'].unique()),
@@ -148,7 +147,9 @@ def dataInput(request):
 		'WeekEventSunday' : weekEvent['Sunday'],
 		'WeekEventIndex': weekEvent['index'],
 		'hourEvent' : hourEvent,
-		'hoursEvent_Type':hoursEvent_Type
+		'hoursEvent_Type':hoursEvent_Type,
+		'monthCases': len(df[df['datetime'] >= parse_datetime('2021-06-30T23:59:59')-timedelta(days=29)]),
+		'weekCases': len(df[df['datetime'] >= parse_datetime('2021-06-30T23:59:59')-timedelta(days=6)]),
 
 	}
 	return render(request, "Analysis/analysis.html", params)
@@ -219,7 +220,6 @@ def getData(request):
 		crimes = Crime.objects.all()
 
 
-
 	# Convert data into Pandas DataFrame
 	dw_mapping={
 	    0: 'Monday', 
@@ -245,6 +245,7 @@ def getData(request):
 	df = pd.DataFrame(DataDict)
 	df['hour'] 	= df['datetime'].dt.hour
 	df['weekDay'] = df['datetime'].dt.dayofweek.map(dw_mapping)
+	df['date'] = df['datetime'].dt.date
 
 
 	# Pi Chart Data (Top 10 Events Type)
@@ -253,13 +254,12 @@ def getData(request):
 	    'labels': [i for i in df['eventtype'].value_counts()[:10].index],
 	}
 
-	print(pi_data)
-
-
-
+	
 	data = {
 		'status' : True,
 		'totalCases': len(crimes),
+		'monthCases': len(df[df['datetime'] >= parse_datetime('2021-06-30T23:59:59')-timedelta(days=29)]),
+		'weekCases': len(df[df['datetime'] >= parse_datetime('2021-06-30T23:59:59')-timedelta(days=6)]),
 		# 'weeklyCrime': ,
 		# 'dailyCrime': ,
 		'pi_series': str([i for i in df['eventtype'].value_counts()[:10].values]),
