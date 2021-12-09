@@ -71,17 +71,16 @@
                 </div>
                 <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
-                        <h5 class="card-title">Time</h5>
-                        <p class="card-text" id="timeVal">{{time}}</p>
-                        <select class="form-select" id='time' onchange="updateData()">
+                        <h5 class="card-title">Radius</h5>
+                        <p class="card-text" id="radiusVal">All</p>
+                        <select class="form-select" id='radius' onchange="updateData()">
                             <option selected value="All">All</option>
-                            <option value="Today">Today</option>
-                            <option value="yesterday">Yesterday</option>
-                            <option value="3days">3 Days</option>
-                            <option value="week">Week</option>
-                            <option value="month">Month</option>
-                            <option value="6month">6 Month</option>
-                            <option value="year">year</option>
+                            <option value="1">1 KM</option>
+                            <option value="2">2 KM</option>
+                            <option value="3">3 KM</option>
+                            <option value="5">5 KM</option>
+                            <option value="7">7 KM</option>
+                            <option value="10">10 KM</option>
                         </select>
                     </div>
                 </div>
@@ -420,7 +419,7 @@ function updateData(){
     var parameters = {
         policeStation: document.getElementById('policeStation').value,
         circle: document.getElementById('circle').value,
-        time: document.getElementById('time').value,
+        radius: document.getElementById('radius').value,
         eventTypes: document.getElementById('eventTypes').value,
         eventSubTypes: document.getElementById('eventSubTypes').value,
         fromdatetime:  document.getElementById('fromdatetime').value,
@@ -478,7 +477,7 @@ function getPredictionPoints(){
     var parameters = {
         policeStation: document.getElementById('policeStation').value,
         circle: document.getElementById('circle').value,
-        time: document.getElementById('time').value,
+        radius: document.getElementById('radius').value,
         eventTypes: document.getElementById('eventTypes').value,
         eventSubTypes: document.getElementById('eventSubTypes').value,
         fromdatetime:  document.getElementById('fromdatetime').value,
@@ -491,7 +490,7 @@ function getPredictionPoints(){
     // console.log("getPredictionPoints")
     document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
     document.getElementById('circleVal').innerHTML = parameters['circle'];
-    document.getElementById('timeVal').innerHTML = parameters['time'];
+    document.getElementById('radiusVal').innerHTML = parameters['radius'];
 }
 
 
