@@ -8,5 +8,7 @@ urlpatterns = [
 	path('getSubEvents/', views.getSubEvents),
 	path(r'^getSubEvents/', views.getSubEvents),
 	path('getPrediction/', views.getPrediction),
-	path(r'^getPrediction/', views.getPrediction)
+	path(r'^getPrediction/', views.getPrediction),
+	path('getTopPrediction/', views.getTopPrediction),
+	path(r'^getTopPrediction/', views.getTopPrediction)
 ]

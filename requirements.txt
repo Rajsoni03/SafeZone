@@ -7,3 +7,4 @@ SpeechRecognition
 pandas
 openpyxl
 geopy
+tensorflow-cpu
