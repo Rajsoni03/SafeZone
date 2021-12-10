@@ -1,71 +1,30 @@
 {% extends "Main/base.html" %}
 {% block content %}
 {%load static%}
-<div
-  id="carouselExampleCaptions"
-  class="carousel slide carousel-fade"
-  data-bs-ride="carousel"
->
-  <div class="carousel-indicators">
-    <button
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide-to="0"
-      class="active"
-      aria-current="true"
-      aria-label="Slide 1"
-    ></button>
-    <button
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide-to="1"
-      aria-label="Slide 2"
-    ></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img
-        src="{%static 'Screenshot (1075).png'%}"
-        width="500"
-        height="550"
-        class="d-block w-100"
-        alt="..."
-      />
-      <div class="carousel-caption d-none d-md-block"></div>
+<div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
     </div>
-    
-    <div class="carousel-item">
-      <img
-        src="{%static 'Screenshot (1053).png'%}"
-        width="500"
-        height="550"
-        class="d-block w-100"
-        alt="..."
-      />
-      <div class="carousel-caption d-none d-md-block"></div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{%static 'Screenshot (1075).png'%}" width="500" height="550" class="d-block w-100" alt="..." />
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+        <div class="carousel-item">
+            <img src="{%static 'Screenshot (1053).png'%}" width="500" height="550" class="d-block w-100" alt="..." />
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
     </div>
-  </div>
-  <button
-    class="carousel-control-prev"
-    type="button"
-    data-bs-target="#carouselExampleCaptions"
-    data-bs-slide="prev"
-  >
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button
-    class="carousel-control-next"
-    type="button"
-    data-bs-target="#carouselExampleCaptions"
-    data-bs-slide="next"
-  >
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
-
-
 <div class="container-fluid">
     <div class="row mt-3 pl-2">
         <div class="card col-4 ml-5 border p-0" style="width: 30rem;">
@@ -89,42 +48,39 @@
         <div class="card col-7 mx-auto ">
             <h2>Important Notification</h2>
             <marquee id="Diwtest" behavior="scroll" height="220px" direction="up" width="100%" scrollamount="2" scrolldelay="1" loop="-10">
-                <a class="mt-2" href="#"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Lorem ipsum dolor sit amet, consectetuer adipis</a><br><br>
-                <a class="mt-2" href="#"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Lorum ipsum dolor sit amet, consectetuer adipis</a><br><br>
-                <a class="mt-2" href="#"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Lorem ipsum dolor sit amet, consectetuer adipis</a><br><br>
-                <a class="mt-2" href="#"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Lorem ipsum dolar sit amet, consectetuer adipis</a><br><br>
+                <a class="mt-2" href="/dataEntry"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Upload Data </a><br><br>
+                <a class="mt-2" href="/analysis"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Analyse Data </a><br><br>
+                <a class="mt-2" href="/map"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Show Map </a><br><br>
+                <a class="mt-2" href="/map"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Predict Patrolling Areas</a><br><br>
             </marquee>
         </div>
     </div>
 </div>
-
 {% comment %} Footer beginning {% endcomment %}
-  <footer class="footer ptb-30">
+<footer class="footer ptb-30">
     <div class="container-fluid space">
         <div class="row text-center">
             <div class="col-md-3 col-6">
-              <img src="https://112.gov.in/assets/images/makeinindia.png">
+                <img src="https://112.gov.in/assets/images/makeinindia.png">
             </div>
             <div class="col-md-3 col-6">
-                    <img src="https://112.gov.in/assets/images/digitalindia.png">
+                <img src="https://112.gov.in/assets/images/digitalindia.png">
             </div>
             <div class="col-md-3 col-6">
-                    <img src="https://112.gov.in/assets/images/india-gov.png">
+                <img src="https://112.gov.in/assets/images/india-gov.png">
             </div>
             <div class="col-md-3 col-6">
-                    <img src="https://112.gov.in/assets/images/mygov.png">
+                <img src="https://112.gov.in/assets/images/mygov.png">
             </div>
         </div>
     </div>
-  </footer>
+</footer>
 {% comment %} Footer end {% endcomment %}
-
 {% comment %} Style {% endcomment %}
 <style>
-
 body {
     margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -133,17 +89,38 @@ body {
     background-color: #fff;
 }
 
-{% comment %} Footer begin {% endcomment %}
+    {
+    % comment %
+}
+
+Footer begin {
+    % endcomment %
+}
+
 .footer {
     position: absolute;
     bottom: 190;
     width: 100%;
-    background-color: rgb(19,19,19);
+    background-color: rgb(19, 19, 19);
     padding-bottom: 8px;
 }
-{% comment %} Footer end {% endcomment %}
 
-{% comment %} Login {% endcomment %}
+    {
+    % comment %
+}
+
+Footer end {
+    % endcomment %
+}
+
+    {
+    % comment %
+}
+
+Login {
+    % endcomment %
+}
+
 .container-fluid {
     width: 100%;
     padding-right: 15px;
@@ -151,12 +128,17 @@ body {
     margin-right: auto;
     margin-left: auto;
 }
-.pl-2, .px-2 {
-    padding-left: 0.5rem!important;
+
+.pl-2,
+.px-2 {
+    padding-left: 0.5rem !important;
 }
-.mt-3, .my-3 {
-    margin-top: 1rem!important;
+
+.mt-3,
+.my-3 {
+    margin-top: 1rem !important;
 }
+
 .row {
     display: -ms-flexbox;
     display: flex;
@@ -165,35 +147,59 @@ body {
     margin-right: -15px;
     margin-left: -15px;
 }
-::after, ::before {
+
+::after,
+::before {
     box-sizing: border-box;
 }
+
 element.style {
     width: 30rem;
 }
+
 .p-0 {
-    padding: 0!important;
+    padding: 0 !important;
 }
-.ml-5, .mx-5 {
-    margin-left: 3rem!important;
+
+.ml-5,
+.mx-5 {
+    margin-left: 3rem !important;
 }
+
 .border {
-    border: 1px solid #dee2e6!important;
+    border: 1px solid #dee2e6 !important;
 }
+
 div {
     display: block;
 }
-h3, h3 {
+
+h3,
+h3 {
     font-size: 1.75rem;
 }
+
 .card-body {
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     padding: 1.25rem;
 }
-{% comment %} Login end {% endcomment %}
 
-{% comment %} Important Notification {% endcomment %}
+    {
+    % comment %
+}
+
+Login end {
+    % endcomment %
+}
+
+    {
+    % comment %
+}
+
+Important Notification {
+    % endcomment %
+}
 
 .card {
     position: relative;
@@ -205,7 +211,7 @@ h3, h3 {
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
 }
 
@@ -215,11 +221,13 @@ h3, h3 {
     max-width: 58.333333%;
 }
 
-.h2, h2 {
+.h2,
+h2 {
     font-size: 2rem;
 }
 
-:host([direction="up"]), :host([direction="down"]) {
+:host([direction="up"]),
+:host([direction="down"]) {
     overflow: initial;
     overflow-y: hidden;
     white-space: initial;
@@ -231,6 +239,7 @@ h3, h3 {
     text-align: initial;
     white-space: nowrap;
 }
+
 marquee[Attributes Style] {
     height: 220px;
     width: 100%;
@@ -242,12 +251,17 @@ a {
     background-color: transparent;
 }
 
-.mt-2, .my-2 {
-    margin-top: 0.5rem!important;
+.mt-2,
+.my-2 {
+    margin-top: 0.5rem !important;
 }
-{% comment %} IMP END {% endcomment %}
 
+    {
+    % comment %
+}
 
+IMP END {
+    % endcomment %
+}
 </style>
-
 {% endblock %}
