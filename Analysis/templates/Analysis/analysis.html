@@ -28,8 +28,37 @@
             <div class="row mx-auto mt-3">
                 <div class="card text-white bg-danger mb-2 col-6 mx-auto" style="width: 48%;">
                     <div class="card-body">
-                        <h5 class="card-title">Total Crime</h5>
-                        <p class="card-text" id="totalCasesSide">{{totalCases}}</p>
+                        <h5 class="card-title">Time (Hour)</h5>
+                        <p class="card-text" id="timeOfeventtext">{{timeOfevent}}</p>
+
+                        <!-- <label for="timeOfevent" class="form-label mt-2"></label> -->
+                        <select class="form-select" id="timeOfevent" onchange="updateData()">
+                            <option selected value="All">All</option>
+                            <option value="0">12 AM</option>
+                            <option value="1">1 AM</option>
+                            <option value="2">2 AM</option>
+                            <option value="3">3 AM</option>
+                            <option value="4">4 AM</option>
+                            <option value="5">5 AM</option>
+                            <option value="6">6 AM</option>
+                            <option value="7">7 AM</option>
+                            <option value="8">8 AM</option>
+                            <option value="9">9 AM</option>
+                            <option value="10">10 AM</option>
+                            <option value="11">11 AM</option>
+                            <option value="12">12 PM</option>
+                            <option value="13">1 PM</option>
+                            <option value="14">2 PM</option>
+                            <option value="15">3 PM</option>
+                            <option value="16">4 PM</option>
+                            <option value="17">5 PM</option>
+                            <option value="18">6 PM</option>
+                            <option value="19">7 PM</option>
+                            <option value="20">8 PM</option>
+                            <option value="21">9 PM</option>
+                            <option value="22">10 PM</option>
+                            <option value="23">11 PM</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
@@ -56,19 +85,20 @@
                         </select>
                     </div>
                 </div>
-                <div class="card text-white bg-primary mb-2 col-6 mx-auto" style="width: 48%;">
+                <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
                     <div class="card-body">
-                        <h5 class="card-title">Time</h5>
-                        <p class="card-text" id="timeVal">{{time}}</p>
-                        <select class="form-select" id='time' onchange="updateData()">
+                        <h5 class="card-title">Radius</h5>
+                        <p class="card-text" id="radiusVal">All</p>
+                        <select class="form-select" id='radius' onchange="updateData()">
                             <option selected value="All">All</option>
-                            <option value="Today">Today</option>
-                            <option value="yesterday">Yesterday</option>
-                            <option value="3days">3 Days</option>
-                            <option value="week">Week</option>
-                            <option value="month">Month</option>
-                            <option value="6month">6 Month</option>
-                            <option value="year">year</option>
+                            <option value="1">1 KM</option>
+                            <option value="2">2 KM</option>
+                            <option value="3">3 KM</option>
+                            <option value="5">5 KM</option>
+                            <option value="7">7 KM</option>
+                            <option value="10">10 KM</option>
+                            <option value="20">20 KM</option>
+                            <option value="30">30 KM</option>
                         </select>
                     </div>
                 </div>
@@ -105,7 +135,7 @@
                         <label for="todatetime" class="form-label">To Date/Time</label>
                         <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}" onchange="updateData()">
                     </div>
-                    <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button>
+                    <button onclick="reloadData()" class="btn btn-primary mt-2">Apply Filter</button>
                 </div>
             </div>
         </div>
@@ -138,8 +168,8 @@
                 <div class="p-2 col-md-3">
                     <div class="card text-white box shadow box4">
                         <div class="card-body">
-                            <h3 class="card-title">Total Crime</h3>
-                            <h4 class="card-text">{{totalCases}}</h4>
+                            <h3 class="card-title">1 Day Crimes</h3>
+                            <h4 class="card-text" id="dayCases">{{dayCases}}</h4>
                         </div>
                     </div>
                 </div>
@@ -607,11 +637,12 @@ function updateData(){
     var parameters = {
         policeStation: document.getElementById('policeStation').value,
         circle: document.getElementById('circle').value,
-        time: document.getElementById('time').value,
+        radius: document.getElementById('radius').value,
         eventTypes: document.getElementById('eventTypes').value,
         eventSubTypes: document.getElementById('eventSubTypes').value,
         fromdatetime:  document.getElementById('fromdatetime').value,
         todatetime:  document.getElementById('todatetime').value,
+        timeOfevent:  document.getElementById('timeOfevent').value,
     };
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -627,9 +658,10 @@ function updateData(){
         // Update No. of cases
         var totalCases = jsonResponse['totalCases'];  
         document.getElementById('totalCases').innerHTML = totalCases;
-        document.getElementById('totalCasesSide').innerHTML = totalCases;
         document.getElementById('monthCases').innerHTML = jsonResponse["monthCases"];
         document.getElementById('weekCases').innerHTML = jsonResponse["weekCases"];
+        document.getElementById('dayCases').innerHTML = jsonResponse["dayCases"];
+        document.getElementById('timeOfeventtext').innerHTML = parameters["timeOfevent"];
 
         // Update Pi Chart Value
         // pi_options['series'] = jsonResponse['pi_series'];  
@@ -644,9 +676,25 @@ function updateData(){
     // map.getSource('datapoints').setData(dataUrl);
     document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
     document.getElementById('circleVal').innerHTML = parameters['circle'];
-    document.getElementById('timeVal').innerHTML = parameters['time'];
+    document.getElementById('radiusVal').innerHTML = parameters['radius'];
 }
 
+
+
+function reloadData(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation').value,
+        circle: document.getElementById('circle').value,
+        radius: document.getElementById('radius').value,
+        eventTypes: document.getElementById('eventTypes').value,
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
+        timeOfevent:  document.getElementById('timeOfevent').value,
+    };
+    var url = buildUrl('/analysis/', parameters);
+    window.location.href = url;
+}
 
 </script>
 {% endblock %}
