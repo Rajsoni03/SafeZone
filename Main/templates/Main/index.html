@@ -25,10 +25,11 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
 <div class="container-fluid">
-    <div class="row mt-3 pl-2">
-        <div class="card col-4 ml-5 border p-0" style="width: 30rem;">
-            <div class="pl-2 mt-1">
+    <div class="row "> 
+        <div class="card col-12 col-md-5 border mx-auto my-2 px-0" style="width: 30rem;">
+            <div class="border p-2 text-center">
                 <h3>LOGIN:</h3>
             </div>
             <div class="card-body" style="background-color: #eee;">
@@ -41,13 +42,15 @@
                         <label for="exampleInputPassword1">Password</label>
                         <input type="password" class="form-control" id="exampleInputPassword1" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn mt-2 btn-primary">Submit</button>
                 </form>
             </div>
         </div>
-        <div class="card col-7 mx-auto ">
-            <h2>Important Notification</h2>
-            <marquee id="Diwtest" behavior="scroll" height="220px" direction="up" width="100%" scrollamount="2" scrolldelay="1" loop="-10">
+        <div class="card col-12 col-md-7 mx-auto px-0 my-2 ">
+            <div class="p-2 text-center">
+                <h2>Important Notification</h2>
+            </div>
+            <marquee id="Diwtest" behavior="scroll" height="220px" direction="up" scrollamount="2" scrolldelay="1" loop="-10">
                 <a class="mt-2" href="/dataEntry"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Upload Data </a><br><br>
                 <a class="mt-2" href="/analysis"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Analyse Data </a><br><br>
                 <a class="mt-2" href="/map"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Show Map </a><br><br>
@@ -56,8 +59,8 @@
         </div>
     </div>
 </div>
-{% comment %} Footer beginning {% endcomment %}
-<footer class="footer ptb-30">
+
+<footer class="footer ptb-30 bg-dark">
     <div class="container-fluid space">
         <div class="row text-center">
             <div class="col-md-3 col-6">
@@ -75,193 +78,4 @@
         </div>
     </div>
 </footer>
-{% comment %} Footer end {% endcomment %}
-{% comment %} Style {% endcomment %}
-<style>
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: left;
-    background-color: #fff;
-}
-
-    {
-    % comment %
-}
-
-Footer begin {
-    % endcomment %
-}
-
-.footer {
-    position: absolute;
-    bottom: 190;
-    width: 100%;
-    background-color: rgb(19, 19, 19);
-    padding-bottom: 8px;
-}
-
-    {
-    % comment %
-}
-
-Footer end {
-    % endcomment %
-}
-
-    {
-    % comment %
-}
-
-Login {
-    % endcomment %
-}
-
-.container-fluid {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-}
-
-.pl-2,
-.px-2 {
-    padding-left: 0.5rem !important;
-}
-
-.mt-3,
-.my-3 {
-    margin-top: 1rem !important;
-}
-
-.row {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-}
-
-::after,
-::before {
-    box-sizing: border-box;
-}
-
-element.style {
-    width: 30rem;
-}
-
-.p-0 {
-    padding: 0 !important;
-}
-
-.ml-5,
-.mx-5 {
-    margin-left: 3rem !important;
-}
-
-.border {
-    border: 1px solid #dee2e6 !important;
-}
-
-div {
-    display: block;
-}
-
-h3,
-h3 {
-    font-size: 1.75rem;
-}
-
-.card-body {
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 1.25rem;
-}
-
-    {
-    % comment %
-}
-
-Login end {
-    % endcomment %
-}
-
-    {
-    % comment %
-}
-
-Important Notification {
-    % endcomment %
-}
-
-.card {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: 0.25rem;
-}
-
-.col-7 {
-    -ms-flex: 0 0 58.333333%;
-    flex: 0 0 58.333333%;
-    max-width: 58.333333%;
-}
-
-.h2,
-h2 {
-    font-size: 2rem;
-}
-
-:host([direction="up"]),
-:host([direction="down"]) {
-    overflow: initial;
-    overflow-y: hidden;
-    white-space: initial;
-}
-
-:host {
-    display: inline-block;
-    overflow: hidden;
-    text-align: initial;
-    white-space: nowrap;
-}
-
-marquee[Attributes Style] {
-    height: 220px;
-    width: 100%;
-}
-
-a {
-    color: #007bff;
-    text-decoration: none;
-    background-color: transparent;
-}
-
-.mt-2,
-.my-2 {
-    margin-top: 0.5rem !important;
-}
-
-    {
-    % comment %
-}
-
-IMP END {
-    % endcomment %
-}
-</style>
 {% endblock %}

@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 <div class="container-fluid">
     <div class="row p-0">
-        <div class="col-3 bg-dark">
+        <div class="col-md-3 col-12 bg-dark pb-2 d-none d-md-block">
             <div class="card mx-auto mt-2 bg-secondary text-white" style="width: 98%;">
                 <div class="card-body">
                     <h5 class="card-title ">Patrolling Points</h5>
@@ -192,9 +192,8 @@
                     <button onclick="updateData()" class="btn btn-primary mt-2">Apply Filter</button> 
                 </div>
             </div>
-
         </div>
-        <div class="col-9 p-0">
+        <div class="col-md-9 col-12 p-0">
             <div id="stylemenu" hidden>
                 <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" checked="checked">
                 <label for="satellite-v9">satellite</label>
@@ -205,15 +204,198 @@
                 <input id="streets-v11" type="radio" name="rtoggle" value="streets">
                 <label for="streets-v11">streets</label>
             </div>
-            <div id='map' style='width: 100%; height: 100%;'>                
-                <!-- <div id="left" class="sidebar flex-center left collapsed">
-                    <div class="sidebar-content rounded-rect flex-center">
-                        Left Sidebar
-                        <div class="sidebar-toggle rounded-rect left" onclick="toggleSidebar('left')">
-                            &rarr;
+            <div id='map' style='width: 100%; height: 100vh;'>
+                <div id="left" class="sidebar flex-center left collapsed">
+                    <div class="sidebar-content rounded-rect insideScroll">  
+                        <div class="card mx-auto mt-2 bg-secondary text-white" style="width: 98%;">
+                            <div class="card-body">
+                                <h5 class="card-title ">Patrolling Points</h5>
+                                <!-- <hr> -->
+                                <label for="timeDelta1" class="form-label">Based on History of </label>
+                                <select class="form-select" id='timeDelta1'>
+                                    <!-- <option selected value="All">All</option> -->
+                                    <option value="1">1 Day</option>
+                                    <option value="2">2 Day</option>
+                                    <option value="3">3 Days</option>
+                                    <option value="7">1 Week</option>
+                                    <option selected value="14">2 Week</option>
+                                    <option value="30">1 Month</option>
+                                    <option value="60">2 Month</option>
+                                </select>
+                                <label for="noOfPoints1" class="form-label mt-2">No. Of Locations</label>
+                                <select class="form-select" id="noOfPoints1">
+                                    <!-- <option selected value="All">All</option> -->
+                                    <option value="1">1</option>
+                                    <option value="3">3</option>
+                                    <option value="5">5</option>
+                                    <option value="7">7</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                                <label for="timeOfpatrolling1" class="form-label mt-2">Time Of Patrolling (Hour)</label>
+                                <select class="form-select" id="timeOfpatrolling1">
+                                    <!-- <option selected value="All">All</option> -->
+                                    <option value="0">12 AM</option>
+                                    <option value="1">1 AM</option>
+                                    <option value="2">2 AM</option>
+                                    <option value="3">3 AM</option>
+                                    <option value="4">4 AM</option>
+                                    <option value="5">5 AM</option>
+                                    <option value="6">6 AM</option>
+                                    <option value="7">7 AM</option>
+                                    <option value="8">8 AM</option>
+                                    <option value="9">9 AM</option>
+                                    <option value="10">10 AM</option>
+                                    <option value="11">11 AM</option>
+                                    <option value="12">12 PM</option>
+                                    <option value="13">1 PM</option>
+                                    <option value="14">2 PM</option>
+                                    <option value="15">3 PM</option>
+                                    <option value="16">4 PM</option>
+                                    <option value="17">5 PM</option>
+                                    <option value="18">6 PM</option>
+                                    <option value="19">7 PM</option>
+                                    <option value="20">8 PM</option>
+                                    <option value="21">9 PM</option>
+                                    <option value="22">10 PM</option>
+                                    <option value="23">11 PM</option>
+                                </select>
+                                <label for="weekDay1" class="form-label mt-2">Week Day</label>
+                                <select class="form-select" id="weekDay1">
+                                    <!-- <option selected value="All">All</option> -->
+                                    <option value="0">Monday</option>
+                                    <option value="1">Tuesday</option>
+                                    <option value="2">Wednesday</option>
+                                    <option value="3">Thursday</option>
+                                    <option value="4">Friday</option>
+                                    <option value="5">Saturday</option>
+                                    <option value="6">Sunday</option>
+                                </select>
+                                <button onclick="getPredictionPoints1()" class="btn btn-light mt-3">Predict Locations</button> 
+                            </div>
+                        </div>
+
+                        <div class="row mx-auto mt-3">
+                            <div class="card text-white bg-danger mb-2 col-6 mx-auto"  style="width: 48%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Crime</h5>
+                                    <p class="card-text">{{totalCases}}</p>
+                                </div>
+                            </div>
+                            <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Police Station</h5>
+                                    <p class="card-text" id="policeStationVal1">{{policeStation}}</p>
+                                    <select class="form-select" id='policeStation1' onchange="updateData1()" >
+                                        <option selected value="All">All</option>
+                                        {%for i in policeStations%}
+                                            <option value="{{i}}">{{i}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card text-white bg-success mb-2 col-6 mx-auto"  style="width: 48%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Circle</h5>
+                                    <p class="card-text" id="circleVal1">{{circle}}</p>
+                                    <select class="form-select" id='circle1' onchange="updateData1()" >
+                                        <option selected value="All">All</option>
+                                        {%for i in circles%}
+                                            <option value="{{i}}">{{i}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Radius</h5>
+                                    <p class="card-text" id="radiusVal1">All</p>
+                                    <select class="form-select" id='radius1' onchange="updateData1()">
+                                        <option selected value="All">All</option>
+                                        <option value="1">1 KM</option>
+                                        <option value="2">2 KM</option>
+                                        <option value="3">3 KM</option>
+                                        <option value="5">5 KM</option>
+                                        <option value="7">7 KM</option>
+                                        <option value="10">10 KM</option>
+                                        <option value="20">20 KM</option>
+                                        <option value="30">30 KM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mx-auto mt-2 bg-light" style="width: 98%;">
+                            <div class="card-body">
+                                <h5 class="card-title">Filters Event by Categories</h5>
+                                <!-- <hr> -->
+                                <label for="eventTypes1" class="form-label">Select Event Type</label>
+                                <select class="form-select" id='eventTypes1' onchange="getSubEvents1()" >
+                                    <option selected value="All">All</option>
+                                    {%for i in eventTypes%}
+                                        <option value="{{i}}">{{i}}</option>
+                                    {%endfor%}
+                                </select>
+
+                                <label for="eventSubTypes1" class="form-label mt-2">Select Event Sub Type</label>
+                                <select class="form-select" id="eventSubTypes1" onchange="updateData1()" >
+                                    <option selected value="All">All</option>
+                                    {%for i in eventSubTypes%}
+                                        <option value="{{i}}">{{i}}</option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+                            <div class="card-body">
+                                <h5 class="card-title">Filters Event by Time</h5>
+                                <!-- <hr> -->
+                                <label for="timeOfevent1" class="form-label mt-2">Time (Hour)</label>
+                                <select class="form-select" id="timeOfevent1" onchange="getSubEvents ()">
+                                    <option selected value="All">All</option>
+                                    <option value="0">12 AM</option>
+                                    <option value="1">1 AM</option>
+                                    <option value="2">2 AM</option>
+                                    <option value="3">3 AM</option>
+                                    <option value="4">4 AM</option>
+                                    <option value="5">5 AM</option>
+                                    <option value="6">6 AM</option>
+                                    <option value="7">7 AM</option>
+                                    <option value="8">8 AM</option>
+                                    <option value="9">9 AM</option>
+                                    <option value="10">10 AM</option>
+                                    <option value="11">11 AM</option>
+                                    <option value="12">12 PM</option>
+                                    <option value="13">1 PM</option>
+                                    <option value="14">2 PM</option>
+                                    <option value="15">3 PM</option>
+                                    <option value="16">4 PM</option>
+                                    <option value="17">5 PM</option>
+                                    <option value="18">6 PM</option>
+                                    <option value="19">7 PM</option>
+                                    <option value="20">8 PM</option>
+                                    <option value="21">9 PM</option>
+                                    <option value="22">10 PM</option>
+                                    <option value="23">11 PM</option>
+                                </select>
+                                <div class="form-group pt-2">
+                                    <label for="fromdatetime1" class="form-label">From Date/Time</label>
+                                    <input type="datetime-local" class="form-control" id="fromdatetime1" value="{{fromDateTime}}" onchange="updateData1()">
+                                </div>
+                                <div class="form-group pt-2">
+                                    <label for="todatetime1" class="form-label">To Date/Time</label>
+                                    <input type="datetime-local" class="form-control" id="todatetime1" value="{{toDateTime}}" onchange="updateData1()">
+                                </div>
+                                <button onclick="updateData1()" class="btn btn-primary mt-2">Apply Filter</button> 
+                            </div>
                         </div>
                     </div>
-                </div> -->
+
+                    <div class="sidebar-toggle rounded-rect left" onclick="toggleSidebar('left')">
+                        &rarr;
+                    </div>
+                </div>
                 <div id="right" class="sidebar flex-center right collapsed">
                     <div class="sidebar-content rounded-rect">  
 
@@ -238,6 +420,11 @@
     </div>
 </div>
 <style>
+
+.insideScroll {
+    position: fixed;
+    overflow-y: scroll;
+}
 
 .rounded-rect {
 background: white;
@@ -298,15 +485,15 @@ cursor: pointer;
 .sidebar {
 transition: transform 1s;
 z-index: 1;
-width: 300px;
+width: 320px;
 height: 100%;
 }
 .left.collapsed {
-transform: translateX(-295px);
+transform: translateX(-315px);
 }
  
 .right.collapsed {
-transform: translateX(295px);
+transform: translateX(315px);
 }
 
 
@@ -347,6 +534,7 @@ function toggleSidebar(id) {
 
 // Load Map
 map.on('load', function (){
+    toggleSidebar('left');
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -618,7 +806,27 @@ function updateData(){
     map.getSource('datapoints').setData(dataUrl);
     document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
     document.getElementById('circleVal').innerHTML = parameters['circle'];
-    document.getElementById('timeVal').innerHTML = parameters['time'];
+    document.getElementById('radiusVal').innerHTML = parameters['radius'];
+}
+
+// Update DataPoints based on Filters (Ajax inbuilt)
+function updateData1(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation1').value,
+        circle: document.getElementById('circle1').value,
+        radius: document.getElementById('radius1').value,
+        eventTypes: document.getElementById('eventTypes1').value,
+        eventSubTypes: document.getElementById('eventSubTypes1').value,
+        fromdatetime:  document.getElementById('fromdatetime1').value,
+        todatetime:  document.getElementById('todatetime1').value,
+        timeOfevent:  document.getElementById('timeOfevent1').value,
+    };
+    var dataUrl = buildUrl('/map/dataPoints/', parameters);
+    // console.log(dataUrl);
+    map.getSource('datapoints').setData(dataUrl);
+    document.getElementById('policeStationVal1').innerHTML = parameters['policeStation'];
+    document.getElementById('circleVal1').innerHTML = parameters['circle'];
+    document.getElementById('radiusVal1').innerHTML = parameters['radius'];
 }
 
 // Update Sub Events List Based On Event Selection 
@@ -660,13 +868,62 @@ function getSubEvents(){
     updateData();
 }
 
+// Update Sub Events List Based On Event Selection 
+function getSubEvents1(){
+    var parameter = {
+        eventTypes: document.getElementById('eventTypes1').value
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/map/getSubEvents/', parameter);
+    // console.log(url);
+    xhr.open("GET", url, true);
+    xhr.onprogress = function(){
+        document.getElementById('eventSubTypes1').disabled = true;
+    }   
+    xhr.onload = function(){
+        var selectBox = document.getElementById('eventSubTypes1');
+        selectBox.disabled = false;
+
+        if (this.status == 200){            
+            var jsonResponse = xhr.response;   
+            var eventSubTypes = jsonResponse['eventSubTypes'];        
+            while (selectBox.options.length > 0) {
+                selectBox.remove(0);
+            };
+
+            selectBox.innerHTML = '<option selected value="All">All</option>';
+
+            for (var i=0; i<eventSubTypes.length; i++){
+                let newOption = new Option(eventSubTypes[i], eventSubTypes[i]);
+                selectBox.add(newOption,undefined);
+            }
+        }
+        else{
+            console.log("Not Working");   
+        }
+    }
+    xhr.send();
+    updateData1();
+}
+
 
 // Get Top 3 Prediction Data and Show on Map
-function getTopPrediction(){
-    var parameter = {
-        policeStation: document.getElementById('policeStation').value,
-        timeOfpatrolling:  document.getElementById('timeOfpatrolling').value,
-        weekDay:  document.getElementById('weekDay').value
+function getTopPrediction(id){
+    var id = id;
+    if (id == '1'){        
+        var parameter = {
+            policeStation: document.getElementById('policeStation1').value,
+            timeOfpatrolling:  document.getElementById('timeOfpatrolling1').value,
+            weekDay:  document.getElementById('weekDay1').value
+        }
+    }
+    else {
+        var parameter = {
+            policeStation: document.getElementById('policeStation').value,
+            timeOfpatrolling:  document.getElementById('timeOfpatrolling').value,
+            weekDay:  document.getElementById('weekDay').value
+        }   
     }
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -738,7 +995,40 @@ function getPredictionPoints(){
         document.getElementById('circleVal').innerHTML = parameters['circle'];
         document.getElementById('radiusVal').innerHTML = parameters['radius'];
 
-        getTopPrediction();
+        getTopPrediction('0');
+    }
+}
+
+// Get Predicted Points and Show on Map (Ajax inbuilt)
+function getPredictionPoints1(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation1').value,
+        circle: document.getElementById('circle1').value,
+        radius: document.getElementById('radius1').value,
+        eventTypes: document.getElementById('eventTypes1').value,
+        eventSubTypes: document.getElementById('eventSubTypes1').value,
+        fromdatetime:  document.getElementById('fromdatetime1').value,
+        todatetime:  document.getElementById('todatetime1').value,
+        timeDelta:  document.getElementById('timeDelta1').value,
+        noOfPoints:  document.getElementById('noOfPoints1').value,
+        timeOfpatrolling:  document.getElementById('timeOfpatrolling1').value,
+        timeOfevent:  document.getElementById('timeOfevent1').value,
+        weekDay:  document.getElementById('weekDay1').value,
+    };
+
+    if (document.getElementById('policeStation1').value == "All"){
+        alert("Please Select A Police Station");
+        return;
+    }        
+    else{
+        var dataUrl = buildUrl('/map/getPrediction/', parameters);
+        map.getSource('predictionpoints').setData(dataUrl);
+        // console.log("getPredictionPoints")
+        document.getElementById('policeStationVal1').innerHTML = parameters['policeStation'];
+        document.getElementById('circleVal1').innerHTML = parameters['circle'];
+        document.getElementById('radiusVal1').innerHTML = parameters['radius'];
+
+        getTopPrediction('1');
     }
 }
 
