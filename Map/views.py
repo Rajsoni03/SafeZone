@@ -390,7 +390,6 @@ def getPrediction(request):
 			N = len(df.loc[(df['latitude'] > latitude-DIFF) & (df['latitude'] < latitude+DIFF) 
 				& (df['longitude'] > longitude-DIFF) & (df['longitude'] < longitude+DIFF) & (df["hour"] >= timeOfpatrolling-2) & (df["hour"] <= timeOfpatrolling+2)])
 
-
 			E = E1 * top_predicted_events_weights[0] + E2 * top_predicted_events_weights[1] + E3 * top_predicted_events_weights[2]
 			return (F*Fw) + (R*Rw)+ (N*Nw) + (E*Ew)
 

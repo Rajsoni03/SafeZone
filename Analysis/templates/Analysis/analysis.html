@@ -24,7 +24,7 @@
 </style>
 <div class="container-fluid">
     <div class="row p-0">
-        <div class="col-3 bg-dark">
+        <div class="col-12 col-md-3 bg-dark pb-3">
             <div class="row mx-auto mt-3">
                 <div class="card text-white bg-danger mb-2 col-6 mx-auto" style="width: 48%;">
                     <div class="card-body">
@@ -139,17 +139,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-9">
+        <div class="col-md-9 col-12">
             <div class="row">
-                <div class="p-2 col-md-3">
-                    <div class="card text-white box shadow box1">
-                        <div class="card-body">
-                            <h3 class="card-title">Total Crimes</h3>
-                            <h4 class="card-text" id="totalCases">{{totalCases}}</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-2 col-md-3">
+                <div class="p-2 col-md-3 col-6">
                     <div class="card text-white box shadow box2">
                         <div class="card-body">
                             <h3 class="card-title">1 Month Crimes</h3>
@@ -157,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-2 col-md-3">
+                <div class="p-2 col-md-3 col-6">
                     <div class="card text-white box shadow box3">
                         <div class="card-body">
                             <h3 class="card-title">1 Week Crimes</h3>
@@ -165,11 +157,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-2 col-md-3">
+                <div class="p-2 col-md-3 col-6">
                     <div class="card text-white box shadow box4">
                         <div class="card-body">
                             <h3 class="card-title">1 Day Crimes</h3>
                             <h4 class="card-text" id="dayCases">{{dayCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3 col-6">
+                    <div class="card text-white box shadow box1">
+                        <div class="card-body">
+                            <h3 class="card-title">Total Crimes</h3>
+                            <h4 class="card-text" id="totalCases">{{totalCases}}</h4>
                         </div>
                     </div>
                 </div>
