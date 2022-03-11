@@ -1,1 +1,2 @@
-# Crime-Prone-Area-Detection
+# SafeZone 2.0
+## Crime-Prone-Area-Detection
