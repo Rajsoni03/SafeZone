@@ -1,0 +1,135 @@
+{% extends 'Main/base.html' %}
+{% block dataEntry %} active {% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center m-3">Add New Data</h1>
+    <div class="row">
+        <div class="col-md-4 col-12 mt-2 ">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Upload Data By CSV </h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Total Records in DB : {{len}}</h6>
+                    <form action="/dataEntry/dataupload" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
+                        <input name="file" type="file" required /><br>
+                        <input type="submit" name="action" value="Upload CSV File" class="btn btn-primary mt-3">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-12 mt-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Select Audio WAV file </h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">112 Call Recordings</h6>
+                    <form action="/dataEntry/speech2text" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
+                        <input name="file" type="file" required />
+                        <input type="submit" name="action" value="Convert to Text" class="btn btn-primary mt-3">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-12 mt-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Converted text </h5>
+                </div>
+                <div class="card-body">
+                    <!-- <h6 class="card-title">Total Records in DB : {{len}}</h6> -->
+                    <form action="/dataEntry/text2analysis" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
+                        <textarea class="form-control" placeholder='Text Data' rows="2" name="textData" required>{{text}}</textarea>
+                        <input type="submit" name="action" value="Convert to Information" class="btn btn-primary mt-2">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-12 mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Information / Manual Entry </h5>
+                </div>
+                <div class="card-body">
+                    <form action="/dataEntry/save2db" method="post" enctype="multipart/form-data" id="uploads">{% csrf_token %}
+                        <div class="row">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="eventID" class="form-label">Event ID</label>
+                                <input type="text" class="form-control" name="eventID" id="eventID" placeholder="P0XXXXXXXXXXX" required>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label for="callerSource" class="form-label">Caller Source</label>
+                                <input type="text" class="form-control" name="callerSource" id="callerSource" placeholder="Caller Source" required>
+                            </div>
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" name="city" id="city" placeholder="City" required>
+                            </div>
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="district" class="form-label">District</label>
+                                <input type="text" class="form-control" name="district" id="district" placeholder="District" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="circle" class="form-label">Circle</label>
+                                <input type="text" class="form-control" name="circle" id="circle" placeholder="Circle" required>
+                            </div>
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="policeStation" class="form-label">Police Station</label>
+                                <input type="text" class="form-control" name="policeStation" id="policeStation" placeholder="Police Station" required>
+                            </div>
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="zipcode" class="form-label">Zip Code</label>
+                                <input type="text" class="form-control" name="zipcode" id="zipcode" placeholder="Zip Code" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="lat" class="form-label">Latitide</label>
+                                <input type="text" class="form-control" name="lat" id="lat" placeholder="Latitide" required>
+                            </div>
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="long" class="form-label">Longitude</label>
+                                <input type="text" class="form-control" name="long" id="long" placeholder="Longitude" required>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="eventtype" class="form-label">Event Type</label>
+                                <input type="text" class="form-control" name="eventtype" id="eventtype" placeholder="Event Type" list="eventtype" required>
+                                <datalist id="eventtype">
+                                    {% for i in eventtype %}
+                                    <option>{{i}}</option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label for="eventsubtype" class="form-label">Event Sub Type</label>
+                                <input type="text" class="form-control" name="eventsubtype" id="eventsubtype" placeholder="Event Sub Type" list="eventsubtype" required>
+                                <datalist id="eventsubtype">
+                                    {% for i in eventsubtype %}
+                                    <option>{{i}}</option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                            <div class="form-group col-12 col-md-6 pt-2">
+                                <label for="datetime" class="form-label">Date Time</label>
+                                <input type="datetime-local" class="form-control" name="datetime" id="datetime" required>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mt-2" type="submit" name="submit">Save To Database</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

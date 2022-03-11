@@ -1,9 +1,81 @@
-{%extends "Main/base.html"%}   
-{%block content%}
-    <div class ="container-fluid">
-      <div class = "row">
-        <div class="coloumn"></div>
-      </div>
+{% extends "Main/base.html" %}
+{% block content %}
+{%load static%}
+<div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
     </div>
-      
-  {%endblock%}
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{%static 'Screenshot (1075).png'%}" width="500" height="550" class="d-block w-100" alt="..." />
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+        <div class="carousel-item">
+            <img src="{%static 'Screenshot (1053).png'%}" width="500" height="550" class="d-block w-100" alt="..." />
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container-fluid">
+    <div class="row "> 
+        <div class="card col-12 col-md-5 border mx-auto my-2 px-0" style="width: 30rem;">
+            <div class="border p-2 text-center">
+                <h3>LOGIN:</h3>
+            </div>
+            <div class="card-body" style="background-color: #eee;">
+                <form method="post" action="/login">{% csrf_token %}
+                    <div class="form-group ">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                    </div>
+                    <button type="submit" class="btn mt-2 btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="card col-12 col-md-7 mx-auto px-0 my-2 ">
+            <div class="p-2 text-center">
+                <h2>Important Notification</h2>
+            </div>
+            <marquee id="Diwtest" behavior="scroll" height="220px" direction="up" scrollamount="2" scrolldelay="1" loop="-10">
+                <a class="mt-2" href="/dataEntry"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Upload Data </a><br><br>
+                <a class="mt-2" href="/analysis"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Analyse Data </a><br><br>
+                <a class="mt-2" href="/map"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Show Map </a><br><br>
+                <a class="mt-2" href="/map"><img src="{%static 'pin.jpg'%}" width="20" height="auto" /> Predict Patrolling Areas</a><br><br>
+            </marquee>
+        </div>
+    </div>
+</div>
+
+<footer class="footer ptb-30 bg-dark">
+    <div class="container-fluid space">
+        <div class="row text-center">
+            <div class="col-md-3 col-6">
+                <img src="https://112.gov.in/assets/images/makeinindia.png">
+            </div>
+            <div class="col-md-3 col-6">
+                <img src="https://112.gov.in/assets/images/digitalindia.png">
+            </div>
+            <div class="col-md-3 col-6">
+                <img src="https://112.gov.in/assets/images/india-gov.png">
+            </div>
+            <div class="col-md-3 col-6">
+                <img src="https://112.gov.in/assets/images/mygov.png">
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,700 @@
+{% extends 'Main/base.html' %}
+{% block analysis %} active {% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+{% load static %}
+<link rel="stylesheet" href="{%static 'Analysis/css/analysis.css'%}">
+<style type="text/css">
+.box1 {
+    background-color: #FD5E75;
+}
+
+.box2 {
+    background-color: #FCB939;
+}
+
+.box3 {
+    background-color: #24E5A3;
+}
+
+.box4 {
+    background-color: #249DF9;
+}
+</style>
+<div class="container-fluid">
+    <div class="row p-0">
+        <div class="col-12 col-md-3 bg-dark pb-3">
+            <div class="row mx-auto mt-3">
+                <div class="card text-white bg-danger mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Time (Hour)</h5>
+                        <p class="card-text" id="timeOfeventtext">{{timeOfevent}}</p>
+
+                        <!-- <label for="timeOfevent" class="form-label mt-2"></label> -->
+                        <select class="form-select" id="timeOfevent" onchange="updateData()">
+                            <option selected value="All">All</option>
+                            <option value="0">12 AM</option>
+                            <option value="1">1 AM</option>
+                            <option value="2">2 AM</option>
+                            <option value="3">3 AM</option>
+                            <option value="4">4 AM</option>
+                            <option value="5">5 AM</option>
+                            <option value="6">6 AM</option>
+                            <option value="7">7 AM</option>
+                            <option value="8">8 AM</option>
+                            <option value="9">9 AM</option>
+                            <option value="10">10 AM</option>
+                            <option value="11">11 AM</option>
+                            <option value="12">12 PM</option>
+                            <option value="13">1 PM</option>
+                            <option value="14">2 PM</option>
+                            <option value="15">3 PM</option>
+                            <option value="16">4 PM</option>
+                            <option value="17">5 PM</option>
+                            <option value="18">6 PM</option>
+                            <option value="19">7 PM</option>
+                            <option value="20">8 PM</option>
+                            <option value="21">9 PM</option>
+                            <option value="22">10 PM</option>
+                            <option value="23">11 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card text-dark bg-warning mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Police Station</h5>
+                        <p class="card-text" id="policeStationVal">{{policeStation}}</p>
+                        <select class="form-select" id='policeStation' onchange="updateData()">
+                            <option selected value="All">All</option>
+                            {%for i in policeStations%}
+                            <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="card text-white bg-success mb-2 col-6 mx-auto" style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Circle</h5>
+                        <p class="card-text" id="circleVal">{{circle}}</p>
+                        <select class="form-select" id='circle' onchange="updateData()">
+                            <option selected value="All">All</option>
+                            {%for i in circles%}
+                            <option value="{{i}}">{{i}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="card text-white bg-primary mb-2 col-6 mx-auto"  style="width: 48%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Radius</h5>
+                        <p class="card-text" id="radiusVal">All</p>
+                        <select class="form-select" id='radius' onchange="updateData()">
+                            <option selected value="All">All</option>
+                            <option value="1">1 KM</option>
+                            <option value="2">2 KM</option>
+                            <option value="3">3 KM</option>
+                            <option value="5">5 KM</option>
+                            <option value="7">7 KM</option>
+                            <option value="10">10 KM</option>
+                            <option value="20">20 KM</option>
+                            <option value="30">30 KM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card mx-auto mt-2 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Categories</h5>
+                    <!-- <hr> -->
+                    <label for="eventTypes" class="form-label">Select Event Type</label>
+                    <select class="form-select" id='eventTypes' onchange="getSubEvents ()">
+                        <option selected value="All">All</option>
+                        {%for i in eventTypes%}
+                        <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
+                    <label for="eventSubTypes" class="form-label mt-2">Select Event Sub Type</label>
+                    <select class="form-select" id="eventSubTypes" onchange="updateData()">
+                        <option selected value="All">All</option>
+                        {%for i in eventSubTypes%}
+                        <option value="{{i}}">{{i}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div class="card mx-auto mt-3 bg-light" style="width: 98%;">
+                <div class="card-body">
+                    <h5 class="card-title">Filters Event by Time</h5>
+                    <!-- <hr> -->
+                    <div class="form-group pt-2">
+                        <label for="fromdatetime" class="form-label">From Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="fromdatetime" value="{{fromDateTime}}" onchange="updateData()">
+                    </div>
+                    <div class="form-group pt-2">
+                        <label for="todatetime" class="form-label">To Date/Time</label>
+                        <input type="datetime-local" class="form-control" id="todatetime" value="{{toDateTime}}" onchange="updateData()">
+                    </div>
+                    <button onclick="reloadData()" class="btn btn-primary mt-2">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 col-12">
+            <div class="row">
+                <div class="p-2 col-md-3 col-6">
+                    <div class="card text-white box shadow box2">
+                        <div class="card-body">
+                            <h3 class="card-title">1 Month Crimes</h3>
+                            <h4 class="card-text" id="monthCases">{{monthCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3 col-6">
+                    <div class="card text-white box shadow box3">
+                        <div class="card-body">
+                            <h3 class="card-title">1 Week Crimes</h3>
+                            <h4 class="card-text" id="weekCases">{{weekCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3 col-6">
+                    <div class="card text-white box shadow box4">
+                        <div class="card-body">
+                            <h3 class="card-title">1 Day Crimes</h3>
+                            <h4 class="card-text" id="dayCases">{{dayCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 col-md-3 col-6">
+                    <div class="card text-white box shadow box1">
+                        <div class="card-body">
+                            <h3 class="card-title">Total Crimes</h3>
+                            <h4 class="card-text" id="totalCases">{{totalCases}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Event Type </h4>
+                        <div id="pi-chart" style="height: 364px"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Date </h4>
+                        <div id="line-adwords"></div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / WeekDay </h4>
+                        <div id="radialBarBottom" style="height: 365px"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Hours</h4>
+                        <div id="hoursPlot"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases in Week By Event Type  </h4>
+                        <div id="dayColumns"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases in Hours By Event Type</h4>
+                        <div id="hoursColumns"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+<!-- <script src="{%static 'Analysis/js/analysis.js'%}"></script> -->
+<script type="text/javascript">
+
+var pi_options = {
+    chart: {
+        height: 380,
+        type: 'pie',
+    },
+    plotOptions: {
+        pie: {
+            offsetX: 50,
+            offsetY: 0
+        }
+    },
+    legend: {
+        offsetX: -100,
+        offsetY: 0
+    },
+    series: {{pi_series}},
+    labels: {{pi_labels|safe}},
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            chart: {
+                width: 200
+            },
+        }
+    }]
+};
+    
+var pichart = new ApexCharts(document.querySelector("#pi-chart"), pi_options);
+pichart.render();
+
+var options = {
+      series: [{
+      name: 'No. of Cases',
+      data: {{lineAdwords_data}}
+    }],
+      chart: {
+      height: 350,
+      type: 'bar'
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: {{lineAdwords_dates|safe}}
+    },
+    tooltip: {
+      x: {
+        format: 'dd/MM/yy'
+      },
+    },
+};
+
+var lineAdwords = new ApexCharts(document.querySelector("#line-adwords"), options);
+lineAdwords.render();
+
+
+// var options = {
+//     series: {{radialBarSeries}},
+//     labels: {{radialBarLabels|safe}},
+//       chart: {
+//       type: 'polarArea',
+//     },
+//     stroke: {
+//       colors: ['#fff']
+//     },
+//     fill: {
+//       opacity: 0.8
+//     },
+//     responsive: [{
+//       breakpoint: 480,
+//       options: {
+//         chart: {
+//           height: 200
+//         },
+//         legend: {
+//           position: 'bottom'
+//         }
+//       }
+//     }]
+// };
+
+
+var options = {
+    series: [{
+        name: 'Total Weekly Cases',
+        data: {{radialBarSeries}},
+    }],
+    chart: {
+        type: 'bar',
+        height: 400,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        type: 'days',
+        categories:  {{radialBarLabels|safe}},
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+
+var radialBarBottom = new ApexCharts(document.querySelector("#radialBarBottom"), options);
+radialBarBottom.render();
+
+
+
+
+var options = {
+      series: [{
+      name: 'No. of Cases',
+      data: {{hoursPlotData}}
+    }],
+      chart: {
+      height: 400,
+      type: 'bar'
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      // type: 'datetime',
+      categories: {{hoursPlotCate|safe}}
+    },
+    // tooltip: {
+    //   x: {
+    //     format: 'dd/MM/yy'
+    //   },
+    // },
+};
+
+var hoursPlot = new ApexCharts(document.querySelector("#hoursPlot"), options);
+hoursPlot.render();
+
+
+
+var options = {
+    series: [{
+        name: '12 AM',
+        data: {{hourEvent.0}}
+    }, {
+        name: '1 AM',
+        data: {{hourEvent.1}}
+    }, {
+        name: '2 AM',
+        data: {{hourEvent.2}}
+    }, {
+        name: '3 AM',
+        data: {{hourEvent.3}}
+    }, {
+        name: '4 AM',
+        data: {{hourEvent.4}}
+    }, {
+        name: '5 AM',
+        data: {{hourEvent.5}}
+    }, {
+        name: '6 AM',
+        data: {{hourEvent.6}}
+    }, {
+        name: '7 AM',
+        data: {{hourEvent.7}}
+    }, {
+        name: '8 AM',
+        data: {{hourEvent.8}}
+    }, {
+        name: '9 AM',
+        data: {{hourEvent.9}}
+    }, {
+        name: '10 AM',
+        data: {{hourEvent.10}}
+    }, {
+        name: '11 AM',
+        data: {{hourEvent.11}}
+    }, {
+        name: '12 PM',
+        data: {{hourEvent.12}}
+    }, {
+        name: '1 PM',
+        data: {{hourEvent.13}}
+    }, {
+        name: '2 PM',
+        data: {{hourEvent.14}}
+    }, {
+        name: '3 PM',
+        data: {{hourEvent.15}}
+    }, {
+        name: '4 PM',
+        data: {{hourEvent.16}}
+    }, {
+        name: '5 PM',
+        data: {{hourEvent.17}}
+    }, {
+        name: '6 PM',
+        data: {{hourEvent.18}}
+    }, {
+        name: '7 PM',
+        data: {{hourEvent.19}}
+    }, {
+        name: '8 PM',
+        data: {{hourEvent.20}}
+    }, {
+        name: '9 PM',
+        data: {{hourEvent.21}}
+    }, {
+        name: '10 PM',
+        data: {{hourEvent.22}}
+    }, {
+        name: '11 PM',
+        data: {{hourEvent.23}}
+    }
+    ],
+    chart: {
+        type: 'bar',
+        height: 500,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        // type: 'days',
+        categories: {{WeekEventIndex|safe}},
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+var dayColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
+dayColumns.render();
+
+
+
+var options = {
+    series: [{
+        name: 'Monday',
+        data: {{WeekEventMonday}}
+    }, {
+        name: 'Tuesday',
+        data: {{WeekEventTuesday}}
+    }, {
+        name: 'Wednesday',
+        data: {{WeekEventWednesday}}
+    }, {
+        name: 'Thursday',
+        data: {{WeekEventThursday}}
+    }, {
+        name: 'Friday',
+        data: {{WeekEventFriday}}
+    }, {
+        name: 'Saturday',
+        data: {{WeekEventSaturday}}
+    }, {
+        name: 'Sunday',
+        data: {{WeekEventSunday}}
+    }],
+    chart: {
+        type: 'bar',
+        height: 500,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        type: 'days',
+        categories: {{WeekEventIndex|safe}},
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+var dayColumns = new ApexCharts(document.querySelector("#dayColumns"), options);
+dayColumns.render();
+
+
+
+
+
+// Create Url Query based on Filters
+function buildUrl(url, parameters){
+    var qs = "";
+    for(var key in parameters) {
+        var value = parameters[key];
+        qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+    }
+    if (qs.length > 0){
+        qs = qs.substring(0, qs.length-1);
+        url = url + "?" + qs;
+    }
+    return url;
+}
+
+// Update Sub Events List Based On Event Selection 
+function getSubEvents(){
+    var parameter = {
+        eventTypes: document.getElementById('eventTypes').value
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/map/getSubEvents/', parameter);
+    // console.log(url);
+    xhr.open("GET", url, true);
+    xhr.onprogress = function(){
+        document.getElementById('eventSubTypes').disabled = true;
+    }   
+    xhr.onload = function(){
+        var selectBox = document.getElementById('eventSubTypes');
+        selectBox.disabled = false;
+
+        if (this.status == 200){            
+            var jsonResponse = xhr.response;   
+            var eventSubTypes = jsonResponse['eventSubTypes'];        
+            while (selectBox.options.length > 0) {
+                selectBox.remove(0);
+            };
+
+            selectBox.innerHTML = '<option selected value="All">All</option>';
+
+            for (var i=0; i<eventSubTypes.length; i++){
+                let newOption = new Option(eventSubTypes[i], eventSubTypes[i]);
+                selectBox.add(newOption,undefined);
+            }
+        }
+        else{
+            console.log("Not Working");   
+        }
+    }
+    xhr.send();
+    updateData();
+}
+
+// Update DataPoints based on Filters (Ajax inbuilt)
+function updateData(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation').value,
+        circle: document.getElementById('circle').value,
+        radius: document.getElementById('radius').value,
+        eventTypes: document.getElementById('eventTypes').value,
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
+        timeOfevent:  document.getElementById('timeOfevent').value,
+    };
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    var url = buildUrl('/analysis/getData/', parameters);
+    xhr.open("GET", url, true);
+
+    xhr.onprogress = function(){
+        // document.getElementById('eventSubTypes').disabled = true;
+    }
+    xhr.onload = function(){
+        var jsonResponse = xhr.response;   
+
+        // Update No. of cases
+        var totalCases = jsonResponse['totalCases'];  
+        document.getElementById('totalCases').innerHTML = totalCases;
+        document.getElementById('monthCases').innerHTML = jsonResponse["monthCases"];
+        document.getElementById('weekCases').innerHTML = jsonResponse["weekCases"];
+        document.getElementById('dayCases').innerHTML = jsonResponse["dayCases"];
+        document.getElementById('timeOfeventtext').innerHTML = parameters["timeOfevent"];
+
+        // Update Pi Chart Value
+        // pi_options['series'] = jsonResponse['pi_series'];  
+        // pi_options['labels'] = jsonResponse['pi_labels'];  
+
+        // dayColumns
+
+    }
+    xhr.send();
+
+    console.log(url);
+    // map.getSource('datapoints').setData(dataUrl);
+    document.getElementById('policeStationVal').innerHTML = parameters['policeStation'];
+    document.getElementById('circleVal').innerHTML = parameters['circle'];
+    document.getElementById('radiusVal').innerHTML = parameters['radius'];
+}
+
+
+
+function reloadData(){
+    var parameters = {
+        policeStation: document.getElementById('policeStation').value,
+        circle: document.getElementById('circle').value,
+        radius: document.getElementById('radius').value,
+        eventTypes: document.getElementById('eventTypes').value,
+        eventSubTypes: document.getElementById('eventSubTypes').value,
+        fromdatetime:  document.getElementById('fromdatetime').value,
+        todatetime:  document.getElementById('todatetime').value,
+        timeOfevent:  document.getElementById('timeOfevent').value,
+    };
+    var url = buildUrl('/analysis/', parameters);
+    window.location.href = url;
+}
+
+</script>
+{% endblock %}

@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link {% block dashboard %}{% endblock %}" href='/analysis/dashboard'><b>Dashboard</b></a>
+                        <a class="nav-link {% block dataEntry %}{% endblock %}" href='/dataEntry'><b>DataEntry</b></a>
                     </li>
                     <li class='nav-item '>
                         <a class="nav-link {% block analysis %}{% endblock %} " href='/analysis'><b>Analysis</b></a>
@@ -39,15 +39,12 @@
                         <a class="nav-link {% block map %}{% endblock %} " href='/map'><b>Maps</b></a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <button class="btn btn-outline-success" type="submit">Login</button>
-                </form>
+               
             </div>
         </div>
     </nav>
-    <br>
     {%block content%}
-    not working
+        <h1>The Page is does not contain Block Content</h1>
     {%endblock%}
 </body>
 
