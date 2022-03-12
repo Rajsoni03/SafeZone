@@ -22,7 +22,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-black">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="https://i.ytimg.com/vi/kVdvF3gY5lI/maxresdefault.jpg" alt="" width="100" height="50"><b>Safe<span class="text-primary">Zone</span></b>
+                <img src="https://i4c.in/themes/innovation/assets/images/events/sih2018/SIH_2018_logo.png" alt="" width="50" height="50"><b>Safe<span class="text-primary">Zone</span></b>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,9 +40,47 @@
                     </li>
                 </ul>
                
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Login
+                </button>
             </div>
         </div>
     </nav>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Login First</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/login" method="POST">{% csrf_token %}
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label" >Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="XYZ@polic.gov.in" name="email">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="12345678" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
     {%block content%}
         <h1>The Page is does not contain Block Content</h1>
     {%endblock%}
