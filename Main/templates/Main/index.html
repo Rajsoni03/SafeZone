@@ -28,7 +28,40 @@
 
 <div class="container-fluid">
     <div class="row "> 
-        <div class="card col-12 col-md-5 border mx-auto my-2 px-0" style="width: 30rem;">
+        {% if user.is_authenticated %}
+        <div class="card col-12 col-md-5 border mx-auto my-2 px-0" style="width: 30rem;">            
+            <div class="border p-2 text-center">
+                <h3>Welcome</h3>
+            </div>
+            <div class="card-body" style="background-color: #eee;">
+                
+                
+
+                <table class="table">
+                  
+                  <tbody>
+                    <tr>
+                      <th scope="col"><h5 class="card-subtitle mb-2 text-muted">Username - </h5></th>
+                        <th scope="col"><span class="card-subtitle">{{ user.username }}</span></th>
+                    </tr>
+                    <tr>
+                        <th scope="col"><h5 class="card-subtitle mb-2 text-muted">Full name - </h5></th>
+                        <th scope="col"><span class="card-subtitle">{{ user.get_full_name }}</span></th>
+                    </tr>
+                    <tr>
+                      <th scope="col"><h5 class="card-subtitle mb-2 text-muted">Email - </h5></th>
+                        <th scope="col"><span class="card-subtitle">{{ user.email }}</span></th>
+                    </tr>
+                    <tr>
+                        <th scope="col"><h5 class="card-subtitle mb-2 text-muted">Session Started at - </h5></th>
+                        <th scope="col"><span class="card-subtitle">{{ user.last_login  }}</span></th>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="card col-12 col-md-5 border mx-auto my-2 px-0" style="width: 30rem;">            
             <div class="border p-2 text-center">
                 <h3>LOGIN:</h3>
             </div>
@@ -36,16 +69,17 @@
                 <form method="post" action="/login">{% csrf_token %}
                     <div class="form-group ">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="XYZ@polic.gov.in" name="email">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="12345678" name="password">
                     </div>
                     <button type="submit" class="btn mt-2 btn-primary">Submit</button>
                 </form>
             </div>
         </div>
+        {% endif %}
         <div class="card col-12 col-md-7 mx-auto px-0 my-2 ">
             <div class="p-2 text-center">
                 <h2>Important Notification</h2>
