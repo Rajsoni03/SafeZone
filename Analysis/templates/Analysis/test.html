@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>jQuery Ajax Example</title>
+    <body>
+      
+                        
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Event Type </h4>
+                        <div id="pi-chart" style="height: 364px"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Date </h4>
+                        <div id="line-adwords"></div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / WeekDay </h4>
+                        <div id="radialBarBottom" style="height: 365px"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases / Hours</h4>
+                        <div id="hoursPlot"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases in Week By Event Type  </h4>
+                        <div id="dayColumns"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="shadow mt-4">
+                        <h4 class="text-center">Cases in Hours By Event Type</h4>
+                        <div id="hoursColumns"></div>
+                    </div>
+                </div>
+            </div>
+
+    </body>
+    <style>
+    #chart {
+        max-width: 650px;
+        margin: 35px auto;
+    }
+    </style>
+    <script>
+    window.Promise ||
+        document.write(
+            '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        )
+    window.Promise ||
+        document.write(
+            '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        )
+    window.Promise ||
+        document.write(
+            '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        )
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+    // Replace Math.random() with a pseudo-random number generator to get reproducible results in e2e tests
+    // Based on https://gist.github.com/blixt/f17b47c62508be59987b
+    var _seed = 42;
+    Math.random = function() {
+        _seed = _seed * 16807 % 2147483647;
+        return (_seed - 1) / 2147483646;
+    };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="chart"></div>
+    <script>
+
+var options = {
+    series: [{
+        name: '12 AM',
+        data: {{hourEvent.0}}
+    }, {
+        name: '1 AM',
+        data: {{hourEvent.1}}
+    }, {
+        name: '2 AM',
+        data: {{hourEvent.2}}
+    }, {
+        name: '3 AM',
+        data: {{hourEvent.3}}
+    }, {
+        name: '4 AM',
+        data: {{hourEvent.4}}
+    }, {
+        name: '5 AM',
+        data: {{hourEvent.5}}
+    }, {
+        name: '6 AM',
+        data: {{hourEvent.6}}
+    }, {
+        name: '7 AM',
+        data: {{hourEvent.7}}
+    }, {
+        name: '8 AM',
+        data: {{hourEvent.8}}
+    }, {
+        name: '9 AM',
+        data: {{hourEvent.9}}
+    }, {
+        name: '10 AM',
+        data: {{hourEvent.10}}
+    }, {
+        name: '11 AM',
+        data: {{hourEvent.11}}
+    }, {
+        name: '12 PM',
+        data: {{hourEvent.12}}
+    }, {
+        name: '1 PM',
+        data: {{hourEvent.13}}
+    }, {
+        name: '2 PM',
+        data: {{hourEvent.14}}
+    }, {
+        name: '3 PM',
+        data: {{hourEvent.15}}
+    }, {
+        name: '4 PM',
+        data: {{hourEvent.16}}
+    }, {
+        name: '5 PM',
+        data: {{hourEvent.17}}
+    }, {
+        name: '6 PM',
+        data: {{hourEvent.18}}
+    }, {
+        name: '7 PM',
+        data: {{hourEvent.19}}
+    }, {
+        name: '8 PM',
+        data: {{hourEvent.20}}
+    }, {
+        name: '9 PM',
+        data: {{hourEvent.21}}
+    }, {
+        name: '10 PM',
+        data: {{hourEvent.22}}
+    }, {
+        name: '11 PM',
+        data: {{hourEvent.23}}
+    }
+    ],
+    chart: {
+        type: 'bar',
+        height: 500,
+        stacked: true,
+        toolbar: {
+            show: true
+        },
+        zoom: {
+            enabled: true
+        }
+    },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+            }
+        }
+    }],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 10
+        },
+    },
+    xaxis: {
+        // type: 'days',
+        categories: {{WeekEventIndex|safe}},
+    },
+    legend: {
+        position: 'right',
+        offsetY: 40
+    },
+    fill: {
+        opacity: 1
+    }
+};
+
+var dayColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
+dayColumns.render();
+
+
+    var hoursPlot = new ApexCharts(document.querySelector("#hoursPlot"), options);
+    hoursPlot.render();
+
+
+    $.getJSON('http://127.0.0.1:8080/analysis/getDataTest/?policeStation=All&circle=All&radius=All&eventTypes=All&eventSubTypes=All&fromdatetime=2021-04-01T00%3A00&todatetime=2021-06-30T23%3A59%3A59&timeOfevent=All', function(response) {
+        // lineAdwords.updateSeries([{
+        //     name: 'No. of Cases',
+        //     data: response['lineData']
+        // }]);
+
+        // pichart.updateSeries([{
+        //     name: 'pie',
+        //     data: response['piData']
+        // }]);
+
+        // dayColumns.updateSeries([{
+        //     name: 'Monday',
+        //     data: response['weekEventData']['Monday']
+        // }]);
+
+        
+        // dayColumns.updateOptions({
+        //     series: [{
+        //         name: 'Monday',
+        //         data: response['weekEventData']['Monday']
+        //       },{
+        //         name: 'Tuesday',
+        //         data: response['weekEventData']['Tuesday']
+        //       },{
+        //         name: 'Wednesday',
+        //         data: response['weekEventData']['Wednesday']
+        //       },{
+        //         name: 'Thursday',
+        //         data: response['weekEventData']['Thursday']
+        //       },{
+        //         name: 'Friday',
+        //         data: response['weekEventData']['Friday']
+        //       },{
+        //         name: 'Saturday',
+        //         data: response['weekEventData']['Saturday']
+        //       },{
+        //         name: 'Sunday',
+        //         data: response['weekEventData']['Sunday']
+        //     }],
+        //     xaxis: {
+        //         type: 'days',
+        //         categories: response['weekEventData']['index'],
+        //     },
+        // });
+    });
+    </script>
+</body>
+
+</html>

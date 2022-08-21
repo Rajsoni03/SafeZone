@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'API',
     'DataEntry',
     'Map',
+    'Staff',
     'Main'
 ]
 

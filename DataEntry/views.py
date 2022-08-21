@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import os
 import speech_recognition as sr
@@ -13,6 +14,7 @@ rec=sr.Recognizer()
 
 
 # Create your views here.
+@login_required(login_url='/')
 def dataEntry(request):
 	params = {
 		'len' : len(Crime.objects.all())
@@ -20,6 +22,7 @@ def dataEntry(request):
 	return render(request, "DataEntry/dataEntry.html", params)
 
 
+@login_required(login_url='/')
 def speech2text(request):
 	text = ""
 	status = False
@@ -48,6 +51,7 @@ def speech2text(request):
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
+@login_required(login_url='/')
 def text2analysis(request):
 	if request.method == "POST":
 		crimes = Crime.objects.all()
@@ -73,6 +77,7 @@ def text2analysis(request):
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
+@login_required(login_url='/')
 def save2db(request):
 	status = False
 	if request.method == "POST":
@@ -114,6 +119,7 @@ def save2db(request):
 	}
 	return render(request, "DataEntry/dataEntry.html", params)
 
+@login_required(login_url='/')
 def dataupload(request):
 	if request.method == "POST":
 

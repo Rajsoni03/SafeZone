@@ -252,9 +252,9 @@ pichart.render();
 
 var options = {
       series: [{
-      name: 'No. of Cases',
-      data: {{lineAdwords_data}}
-    }],
+          name: 'No. of Cases',
+          data: {{lineAdwords_data}}
+        }],
       chart: {
       height: 350,
       type: 'bar'
@@ -280,36 +280,14 @@ var lineAdwords = new ApexCharts(document.querySelector("#line-adwords"), option
 lineAdwords.render();
 
 
-// var options = {
-//     series: {{radialBarSeries}},
-//     labels: {{radialBarLabels|safe}},
-//       chart: {
-//       type: 'polarArea',
-//     },
-//     stroke: {
-//       colors: ['#fff']
-//     },
-//     fill: {
-//       opacity: 0.8
-//     },
-//     responsive: [{
-//       breakpoint: 480,
-//       options: {
-//         chart: {
-//           height: 200
-//         },
-//         legend: {
-//           position: 'bottom'
-//         }
-//       }
-//     }]
-// };
-
-
 var options = {
     series: [{
         name: 'Total Weekly Cases',
-        data: {{radialBarSeries}},
+        data: [
+        {
+            "x": "_",
+            "y": "0"
+        }],
     }],
     chart: {
         type: 'bar',
@@ -340,7 +318,7 @@ var options = {
     },
     xaxis: {
         type: 'days',
-        categories:  {{radialBarLabels|safe}},
+        categories:  [],
     },
     legend: {
         position: 'right',
@@ -354,6 +332,8 @@ var options = {
 
 var radialBarBottom = new ApexCharts(document.querySelector("#radialBarBottom"), options);
 radialBarBottom.render();
+
+
 
 
 var options = {
@@ -372,14 +352,9 @@ var options = {
       curve: 'smooth'
     },
     xaxis: {
-      // type: 'datetime',
+      type: 'time',
       categories: {{hoursPlotCate|safe}}
-    },
-    // tooltip: {
-    //   x: {
-    //     format: 'dd/MM/yy'
-    //   },
-    // },
+    }
 };
 
 var hoursPlot = new ApexCharts(document.querySelector("#hoursPlot"), options);
@@ -642,9 +617,10 @@ function updateData(){
         todatetime:  document.getElementById('todatetime').value,
         timeOfevent:  document.getElementById('timeOfevent').value,
     };
+
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    var url = buildUrl('/analysis/getData/', parameters);
+    var url = buildUrl('/analysis/getDataTest/', parameters);
     xhr.open("GET", url, true);
 
     xhr.onprogress = function(){
@@ -661,12 +637,49 @@ function updateData(){
         document.getElementById('dayCases').innerHTML = jsonResponse["dayCases"];
         document.getElementById('timeOfeventtext').innerHTML = parameters["timeOfevent"];
 
-        // Update Pi Chart Value
-        // pi_options['series'] = jsonResponse['pi_series'];  
-        // pi_options['labels'] = jsonResponse['pi_labels'];  
+        // Update Charts Value
+        lineAdwords.updateSeries([{
+            name: 'No. of Cases',
+            data: jsonResponse['lineData']
+        }]);
 
-        // dayColumns
+        radialBarBottom.updateSeries([{
+            name: 'Total Weekly Cases',
+            data: jsonResponse['radialData']
+        }]);
+        hoursPlot.updateSeries([{
+            name: 'No. of Cases',
+            data: jsonResponse['hoursData']
+        }]);
 
+        dayColumns.updateOptions({
+            series: [{
+                name: 'Monday',
+                data: jsonResponse['weekEventData']['Monday']
+              },{
+                name: 'Tuesday',
+                data: jsonResponse['weekEventData']['Tuesday']
+              },{
+                name: 'Wednesday',
+                data: jsonResponse['weekEventData']['Wednesday']
+              },{
+                name: 'Thursday',
+                data: jsonResponse['weekEventData']['Thursday']
+              },{
+                name: 'Friday',
+                data: jsonResponse['weekEventData']['Friday']
+              },{
+                name: 'Saturday',
+                data: jsonResponse['weekEventData']['Saturday']
+              },{
+                name: 'Sunday',
+                data: jsonResponse['weekEventData']['Sunday']
+            }],
+            xaxis: {
+                type: 'days',
+                categories: jsonResponse['weekEventData']['index'],
+            },
+        });
     }
     xhr.send();
 
@@ -676,6 +689,7 @@ function updateData(){
     document.getElementById('circleVal').innerHTML = parameters['circle'];
     document.getElementById('radiusVal').innerHTML = parameters['radius'];
 }
+updateData();
 
 
 

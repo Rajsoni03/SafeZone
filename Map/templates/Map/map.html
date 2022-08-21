@@ -154,7 +154,7 @@
                     <h5 class="card-title">Filters Event by Time</h5>
                     <!-- <hr> -->
                     <label for="timeOfevent" class="form-label mt-2">Time (Hour)</label>
-                    <select class="form-select" id="timeOfevent" onchange="getSubEvents ()">
+                    <select class="form-select" id="timeOfevent" onchange="getSubEvents()">
                         <option selected value="All">All</option>
                         <option value="0">12 AM</option>
                         <option value="1">1 AM</option>
@@ -209,7 +209,7 @@
                     <div class="sidebar-content rounded-rect insideScroll">  
                         <div class="card mx-auto mt-2 bg-secondary text-white" style="width: 98%;">
                             <div class="card-body">
-                                <h5 class="card-title ">Patrolling Points</h5>
+                                <h5 class="card-title">Patrolling Points</h5>
                                 <!-- <hr> -->
                                 <label for="timeDelta1" class="form-label">Based on History of </label>
                                 <select class="form-select" id='timeDelta1'>
@@ -531,10 +531,13 @@ function toggleSidebar(id) {
         duration: 1000 // In ms. This matches the CSS transition duration property.
     });
 }
+const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
+
+
 
 // Load Map
-map.on('load', function (){
-    toggleSidebar('left');
+map.on('load', function (){    
+    if (isMobile){toggleSidebar('left')};
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,

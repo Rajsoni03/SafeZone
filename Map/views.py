@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from DataEntry.models import Crime
 from django.http import JsonResponse
 from datetime import date, timedelta, datetime
@@ -7,7 +8,7 @@ from math import sin, cos, asin, sqrt, degrees, radians
 import pandas as pd
 import tensorflow as tf
 import os
-
+ 
 model = tf.keras.models.load_model(os.path.join(os.getcwd(), os.path.join('staticfiles','model.h5'))) # load .h5 Model
 now = datetime.now()
 
@@ -41,6 +42,7 @@ Event_index_top = ['Accident', 'Accident Explosive', 'Assault/Riot/Commotion',
 
 
 # Create your views here.
+@login_required(login_url='/')
 def map(request):
 	crimes = Crime.objects.all()
 	lat_long = []
@@ -83,6 +85,7 @@ def map(request):
 	return render(request, "Map/map.html", params)
 
 
+@login_required(login_url='/')
 def dataPoints(request):
 	head 			= '{"type": "FeatureCollection","features": ['
 	data_head 		= '{"type": "Feature", "properties": {'
@@ -190,6 +193,8 @@ def dataPoints(request):
 
 	return JsonResponse(data=eval(data))
 
+
+@login_required(login_url='/')
 def getSubEvents(request):
 	eventTypes 		= request.GET.get('eventTypes')
 	eventTypes 		= None if eventTypes == 'All' else eventTypes
@@ -207,6 +212,8 @@ def getSubEvents(request):
 	}
 	return JsonResponse(data=data)
 
+
+@login_required(login_url='/')
 def getPrediction(request):
 	# Hyper Parameters
 	timeDelta			= request.GET.get('timeDelta')
@@ -454,6 +461,8 @@ def getPrediction(request):
 		data = '{"type": "FeatureCollection","features": []}'
 		return JsonResponse(data=eval(data))
 
+
+@login_required(login_url='/')
 def getTopPrediction(request):
 
 	# Get Request Data 
