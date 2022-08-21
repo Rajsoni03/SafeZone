@@ -221,6 +221,8 @@
 <script type="text/javascript">
 
 var pi_options = {
+    series: [],
+    labels: [],
     chart: {
         height: 380,
         type: 'pie',
@@ -235,8 +237,6 @@ var pi_options = {
         offsetX: -100,
         offsetY: 0
     },
-    series: {{pi_series}},
-    labels: {{pi_labels|safe}},
     responsive: [{
         breakpoint: 480,
         options: {
@@ -252,9 +252,9 @@ pichart.render();
 
 var options = {
       series: [{
-      name: 'No. of Cases',
-      data: {{lineAdwords_data}}
-    }],
+          name: 'No. of Cases',
+          data: []
+        }],
       chart: {
       height: 350,
       type: 'bar'
@@ -267,7 +267,7 @@ var options = {
     },
     xaxis: {
       type: 'datetime',
-      categories: {{lineAdwords_dates|safe}}
+      categories: []
     },
     tooltip: {
       x: {
@@ -280,36 +280,14 @@ var lineAdwords = new ApexCharts(document.querySelector("#line-adwords"), option
 lineAdwords.render();
 
 
-// var options = {
-//     series: {{radialBarSeries}},
-//     labels: {{radialBarLabels|safe}},
-//       chart: {
-//       type: 'polarArea',
-//     },
-//     stroke: {
-//       colors: ['#fff']
-//     },
-//     fill: {
-//       opacity: 0.8
-//     },
-//     responsive: [{
-//       breakpoint: 480,
-//       options: {
-//         chart: {
-//           height: 200
-//         },
-//         legend: {
-//           position: 'bottom'
-//         }
-//       }
-//     }]
-// };
-
-
 var options = {
     series: [{
         name: 'Total Weekly Cases',
-        data: {{radialBarSeries}},
+        data: [
+        {
+            "x": "_",
+            "y": "0"
+        }],
     }],
     chart: {
         type: 'bar',
@@ -340,7 +318,7 @@ var options = {
     },
     xaxis: {
         type: 'days',
-        categories:  {{radialBarLabels|safe}},
+        categories:  [],
     },
     legend: {
         position: 'right',
@@ -359,7 +337,7 @@ radialBarBottom.render();
 var options = {
       series: [{
       name: 'No. of Cases',
-      data: {{hoursPlotData}}
+      data: []
     }],
       chart: {
       height: 400,
@@ -372,14 +350,9 @@ var options = {
       curve: 'smooth'
     },
     xaxis: {
-      // type: 'datetime',
-      categories: {{hoursPlotCate|safe}}
-    },
-    // tooltip: {
-    //   x: {
-    //     format: 'dd/MM/yy'
-    //   },
-    // },
+      type: 'time',
+      categories: []
+    }
 };
 
 var hoursPlot = new ApexCharts(document.querySelector("#hoursPlot"), options);
@@ -388,79 +361,7 @@ hoursPlot.render();
 
 
 var options = {
-    series: [{
-        name: '12 AM',
-        data: {{hourEvent.0}}
-    }, {
-        name: '1 AM',
-        data: {{hourEvent.1}}
-    }, {
-        name: '2 AM',
-        data: {{hourEvent.2}}
-    }, {
-        name: '3 AM',
-        data: {{hourEvent.3}}
-    }, {
-        name: '4 AM',
-        data: {{hourEvent.4}}
-    }, {
-        name: '5 AM',
-        data: {{hourEvent.5}}
-    }, {
-        name: '6 AM',
-        data: {{hourEvent.6}}
-    }, {
-        name: '7 AM',
-        data: {{hourEvent.7}}
-    }, {
-        name: '8 AM',
-        data: {{hourEvent.8}}
-    }, {
-        name: '9 AM',
-        data: {{hourEvent.9}}
-    }, {
-        name: '10 AM',
-        data: {{hourEvent.10}}
-    }, {
-        name: '11 AM',
-        data: {{hourEvent.11}}
-    }, {
-        name: '12 PM',
-        data: {{hourEvent.12}}
-    }, {
-        name: '1 PM',
-        data: {{hourEvent.13}}
-    }, {
-        name: '2 PM',
-        data: {{hourEvent.14}}
-    }, {
-        name: '3 PM',
-        data: {{hourEvent.15}}
-    }, {
-        name: '4 PM',
-        data: {{hourEvent.16}}
-    }, {
-        name: '5 PM',
-        data: {{hourEvent.17}}
-    }, {
-        name: '6 PM',
-        data: {{hourEvent.18}}
-    }, {
-        name: '7 PM',
-        data: {{hourEvent.19}}
-    }, {
-        name: '8 PM',
-        data: {{hourEvent.20}}
-    }, {
-        name: '9 PM',
-        data: {{hourEvent.21}}
-    }, {
-        name: '10 PM',
-        data: {{hourEvent.22}}
-    }, {
-        name: '11 PM',
-        data: {{hourEvent.23}}
-    }
+    series: [
     ],
     chart: {
         type: 'bar',
@@ -491,7 +392,7 @@ var options = {
     },
     xaxis: {
         // type: 'days',
-        categories: {{WeekEventIndex|safe}},
+        categories: [],
     },
     legend: {
         position: 'right',
@@ -502,34 +403,13 @@ var options = {
     }
 };
 
-var dayColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
-dayColumns.render();
+var hoursColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
+hoursColumns.render();
 
 
 
 var options = {
-    series: [{
-        name: 'Monday',
-        data: {{WeekEventMonday}}
-    }, {
-        name: 'Tuesday',
-        data: {{WeekEventTuesday}}
-    }, {
-        name: 'Wednesday',
-        data: {{WeekEventWednesday}}
-    }, {
-        name: 'Thursday',
-        data: {{WeekEventThursday}}
-    }, {
-        name: 'Friday',
-        data: {{WeekEventFriday}}
-    }, {
-        name: 'Saturday',
-        data: {{WeekEventSaturday}}
-    }, {
-        name: 'Sunday',
-        data: {{WeekEventSunday}}
-    }],
+    series: [],
     chart: {
         type: 'bar',
         height: 500,
@@ -559,7 +439,7 @@ var options = {
     },
     xaxis: {
         type: 'days',
-        categories: {{WeekEventIndex|safe}},
+        categories: [],
     },
     legend: {
         position: 'right',
@@ -572,8 +452,6 @@ var options = {
 
 var dayColumns = new ApexCharts(document.querySelector("#dayColumns"), options);
 dayColumns.render();
-
-
 
 
 
@@ -642,6 +520,7 @@ function updateData(){
         todatetime:  document.getElementById('todatetime').value,
         timeOfevent:  document.getElementById('timeOfevent').value,
     };
+
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     var url = buildUrl('/analysis/getData/', parameters);
@@ -661,12 +540,134 @@ function updateData(){
         document.getElementById('dayCases').innerHTML = jsonResponse["dayCases"];
         document.getElementById('timeOfeventtext').innerHTML = parameters["timeOfevent"];
 
-        // Update Pi Chart Value
-        // pi_options['series'] = jsonResponse['pi_series'];  
-        // pi_options['labels'] = jsonResponse['pi_labels'];  
+        // Update Charts Value
+        pichart.updateOptions({
+            series: jsonResponse['piData']['series'],
+            labels: jsonResponse['piData']['labels'],            
+        });
 
-        // dayColumns
+        lineAdwords.updateSeries([{
+            name: 'No. of Cases',
+            data: jsonResponse['lineData']
+        }]);
 
+        radialBarBottom.updateSeries([{
+            name: 'Total Weekly Cases',
+            data: jsonResponse['radialData']
+        }]);
+        hoursPlot.updateSeries([{
+            name: 'No. of Cases',
+            data: jsonResponse['hoursData']
+        }]);
+
+        dayColumns.updateOptions({
+            series: [{
+                name: 'Monday',
+                data: jsonResponse['weekEventData']['Monday']
+              },{
+                name: 'Tuesday',
+                data: jsonResponse['weekEventData']['Tuesday']
+              },{
+                name: 'Wednesday',
+                data: jsonResponse['weekEventData']['Wednesday']
+              },{
+                name: 'Thursday',
+                data: jsonResponse['weekEventData']['Thursday']
+              },{
+                name: 'Friday',
+                data: jsonResponse['weekEventData']['Friday']
+              },{
+                name: 'Saturday',
+                data: jsonResponse['weekEventData']['Saturday']
+              },{
+                name: 'Sunday',
+                data: jsonResponse['weekEventData']['Sunday']
+            }],
+            xaxis: {
+                type: 'days',
+                categories: jsonResponse['weekEventData']['index'],
+            },
+        });
+
+        hoursColumns.updateOptions({
+            series: [{
+                name: '12 AM',
+                data: jsonResponse['hourEvent']['0']
+              },{
+                name: '1 AM',
+                data: jsonResponse['hourEvent']['1']
+              },{
+                name: '2 AM',
+                data: jsonResponse['hourEvent']['2']
+              },{
+                name: '3 AM',
+                data: jsonResponse['hourEvent']['3']
+              },{
+                name: '4 AM',
+                data: jsonResponse['hourEvent']['4']
+              },{
+                name: '5 AM',
+                data: jsonResponse['hourEvent']['5']
+              },{
+                name: '6 AM',
+                data: jsonResponse['hourEvent']['6']
+              },{
+                name: '7 AM',
+                data: jsonResponse['hourEvent']['7']
+              },{
+                name: '8 AM',
+                data: jsonResponse['hourEvent']['8']
+              },{
+                name: '9 AM',
+                data: jsonResponse['hourEvent']['9']
+              },{
+                name: '10 AM',
+                data: jsonResponse['hourEvent']['10']
+              },{
+                name: '11 AM',
+                data: jsonResponse['hourEvent']['11']
+              },{
+                name: '12 AM',
+                data: jsonResponse['hourEvent']['12']
+              },{
+                name: '1 PM',
+                data: jsonResponse['hourEvent']['13']
+              },{
+                name: '2 PM',
+                data: jsonResponse['hourEvent']['14']
+              },{
+                name: '3 PM',
+                data: jsonResponse['hourEvent']['15']
+              },{
+                name: '4 PM',
+                data: jsonResponse['hourEvent']['16']
+              },{
+                name: '5 PM',
+                data: jsonResponse['hourEvent']['17']
+              },{
+                name: '6 PM',
+                data: jsonResponse['hourEvent']['18']
+              },{
+                name: '7 PM',
+                data: jsonResponse['hourEvent']['19']
+              },{
+                name: '8 PM',
+                data: jsonResponse['hourEvent']['20']
+              },{
+                name: '9 PM',
+                data: jsonResponse['hourEvent']['21']
+              },{
+                name: '10 PM',
+                data: jsonResponse['hourEvent']['22']
+              },{
+                name: '11 PM',
+                data: jsonResponse['hourEvent']['23']
+              }],
+            xaxis: {
+                type: 'days',
+                categories: jsonResponse['weekEventData']['index'],
+            },
+        });
     }
     xhr.send();
 
@@ -676,6 +677,7 @@ function updateData(){
     document.getElementById('circleVal').innerHTML = parameters['circle'];
     document.getElementById('radiusVal').innerHTML = parameters['radius'];
 }
+updateData();
 
 
 

@@ -7,7 +7,5 @@ urlpatterns = [
 	path('dashboard/', views.dashboard),
 	path('getData/', views.getData),
 	path(r'^getData/', views.getData),
-	path('getDataTest/', views.getDataTest),
-	path(r'^getDataTest/', views.getDataTest),
 	path('testPage/', views.testPage),
 ]
