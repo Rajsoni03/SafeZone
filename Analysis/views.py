@@ -622,21 +622,38 @@ def getDataTest(request):
 		Event_Type.append(str(i))
 		try:
 			Monday.append(temp_df.Monday)
+		except Exception as e:
+			print('\n', e, '\n')
+			Monday.append(0)
+		try:
 			Tuesday.append(temp_df.Tuesday)
+		except Exception as e:
+			print('\n', e, '\n')
+			Tuesday.append(0)
+		try:
 			Wednesday.append(temp_df.Wednesday)
+		except Exception as e:
+			print('\n', e, '\n')
+			Wednesday.append(0)
+		try:
 			Thursday.append(temp_df.Thursday)
+		except Exception as e:
+			print('\n', e, '\n')
+			Thursday.append(0)
+		try:
 			Friday.append(temp_df.Friday)
+		except Exception as e:
+			print('\n', e, '\n')
+			Friday.append(0)
+		try:
 			Saturday.append(temp_df.Saturday)
+		except Exception as e:
+			print('\n', e, '\n')
+			Saturday.append(0)
+		try:
 			Sunday.append(temp_df.Sunday)
 		except Exception as e:
 			print('\n', e, '\n')
-		else:
-			Monday.append(0)
-			Tuesday.append(0)
-			Wednesday.append(0)
-			Thursday.append(0)
-			Friday.append(0)
-			Saturday.append(0)
 			Sunday.append(0)
 
 	weekEvent = {'Monday' : [int(i*100) for i in Monday],

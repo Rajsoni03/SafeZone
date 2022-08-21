@@ -477,8 +477,8 @@ var options = {
     }
 };
 
-var dayColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
-dayColumns.render();
+var hoursColumns = new ApexCharts(document.querySelector("#hoursColumns"), options);
+hoursColumns.render();
 
 
 
@@ -675,6 +675,86 @@ function updateData(){
                 name: 'Sunday',
                 data: jsonResponse['weekEventData']['Sunday']
             }],
+            xaxis: {
+                type: 'days',
+                categories: jsonResponse['weekEventData']['index'],
+            },
+        });
+
+        hoursColumns.updateOptions({
+            series: [{
+                name: '0',
+                data: jsonResponse['hourEvent']['0']
+              },{
+                name: '1',
+                data: jsonResponse['hourEvent']['1']
+              },{
+                name: '2',
+                data: jsonResponse['hourEvent']['2']
+              },{
+                name: '3',
+                data: jsonResponse['hourEvent']['3']
+              },{
+                name: '4',
+                data: jsonResponse['hourEvent']['4']
+              },{
+                name: '5',
+                data: jsonResponse['hourEvent']['5']
+              },{
+                name: '6',
+                data: jsonResponse['hourEvent']['6']
+              },{
+                name: '7',
+                data: jsonResponse['hourEvent']['7']
+              },{
+                name: '8',
+                data: jsonResponse['hourEvent']['8']
+              },{
+                name: '9',
+                data: jsonResponse['hourEvent']['9']
+              },{
+                name: '10',
+                data: jsonResponse['hourEvent']['10']
+              },{
+                name: '11',
+                data: jsonResponse['hourEvent']['11']
+              },{
+                name: '12',
+                data: jsonResponse['hourEvent']['12']
+              },{
+                name: '13',
+                data: jsonResponse['hourEvent']['13']
+              },{
+                name: '14',
+                data: jsonResponse['hourEvent']['14']
+              },{
+                name: '15',
+                data: jsonResponse['hourEvent']['15']
+              },{
+                name: '16',
+                data: jsonResponse['hourEvent']['16']
+              },{
+                name: '17',
+                data: jsonResponse['hourEvent']['17']
+              },{
+                name: '18',
+                data: jsonResponse['hourEvent']['18']
+              },{
+                name: '19',
+                data: jsonResponse['hourEvent']['19']
+              },{
+                name: '20',
+                data: jsonResponse['hourEvent']['20']
+              },{
+                name: '21',
+                data: jsonResponse['hourEvent']['21']
+              },{
+                name: '22',
+                data: jsonResponse['hourEvent']['22']
+              },{
+                name: '23',
+                data: jsonResponse['hourEvent']['23']
+              }],
             xaxis: {
                 type: 'days',
                 categories: jsonResponse['weekEventData']['index'],
