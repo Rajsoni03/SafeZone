@@ -10,5 +10,7 @@ urlpatterns = [
 	path('getPrediction/', views.getPrediction),
 	path(r'^getPrediction/', views.getPrediction),
 	path('getTopPrediction/', views.getTopPrediction),
-	path(r'^getTopPrediction/', views.getTopPrediction)
+	path(r'^getTopPrediction/', views.getTopPrediction),
+	path('getNearPlaces/', views.getNearPlaces),
+	path(r'^getNearPlaces/', views.getNearPlaces)
 ]

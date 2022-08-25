@@ -8,6 +8,8 @@ from math import sin, cos, asin, sqrt, degrees, radians
 import pandas as pd
 import tensorflow as tf
 import os
+import requests
+
  
 model = tf.keras.models.load_model(os.path.join(os.getcwd(), os.path.join('staticfiles','model.h5'))) # load .h5 Model
 now = datetime.now()
@@ -501,3 +503,44 @@ def getTopPrediction(request):
 		"predicted_events_weights":	top_predicted_events_weights
 	}
 	return JsonResponse(data=data)
+
+def getNearPlaces(request):
+# 	lat = 26.876
+# 	long = 81.055
+# 	limit = 50
+
+# 	url = "https://api.foursquare.com/v3/places/nearby?ll={}%2C{}&limit={}".format(lat, long, limit)
+
+# 	headers = {
+# 	    "Accept": "application/json",
+# 	    "Authorization": "fsq3AJY1p0lkNo9/6QWGrb7R1nZANvJeGz3EOnG9e8g39lA="
+# 	}
+
+# 	response = requests.request("GET", url, headers=headers)
+# 	data = json.loads(json.dumps(json.JSONDecoder().raw_decode(response.text)))
+
+# 	list_data = data[0]['results']
+
+# 	data = {
+# 		'categories' : [],
+# 		'name' : [],
+# 		'distance' : []
+# 	}
+
+# 	for i in list_data:
+# 	    try:
+# 	        categories = i['categories'][0]['name']
+# 	        name = i['name']
+# 	        distance = i['distance']
+			
+# 			data['categories'] = 
+# 			data['name'] = 
+# 			data['distance'] = 
+# 	    except:
+# 	        pass
+
+	
+	params = {
+		'status' : True,
+	}
+	return JsonResponse(params)

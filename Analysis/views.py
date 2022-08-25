@@ -539,6 +539,7 @@ def getData(request):
 		'weekEventData': weekEvent,
 		'hourEvent' : hourEvent,
 		'hoursEvent_Type':hoursEvent_Type,
+		# 'crimesList': crimes,
 	}
 	return JsonResponse(data=data)
 
