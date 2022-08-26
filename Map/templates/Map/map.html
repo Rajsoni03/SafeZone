@@ -6,6 +6,8 @@
 <!-- Load the `mapbox-gl-geocoder` plugin. -->
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css" type="text/css">
 <div class="container-fluid">
     <div class="row p-0">
         <div class="col-md-3 col-12 bg-dark pb-2 d-none d-md-block">
@@ -538,11 +540,17 @@ const isMobile = ('ontouchstart' in document.documentElement && navigator.userAg
 // Load Map
 map.on('load', function (){    
     if (isMobile){toggleSidebar('left')};
+    // map.addControl(
+    //     new MapboxGeocoder({
+    //         accessToken: mapboxgl.accessToken,
+    //         mapboxgl: mapboxgl
+    //     })
+    // );
     map.addControl(
-        new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl
-        })
+        new MapboxDirections({
+            accessToken: mapboxgl.accessToken
+        }),
+        'top-left'
     );
 
 
@@ -762,12 +770,73 @@ map.on('load', function (){
         }
     });
     // toggleSidebar('');
+
+    map.loadImage(
+        // 'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+        // 'https://www.pngmart.com/files/21/Police-Vector-PNG-Isolated-Image.png',
+        // 'https://uxwing.com/wp-content/themes/uxwing/download/crime-security-military-law/police-icon.png',
+        'data:image/png;base64,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',
+        (error, image) => {
+            if (error) throw error;
+            map.addImage('custom-marker', image);
+            // Add a GeoJSON source with 2 points
+            map.addSource('points', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': [{
+                            // feature for Mapbox DC
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [81.023, 26.835]
+                            }},{
+                            // feature for Mapbox DC
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [80.992, 26.850]
+                            }},{
+                            // feature for Mapbox DC
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [81.048, 26.900]
+                            }},{
+                            // feature for Mapbox DC
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [81.014, 26.865]
+                            },
+                        }
+                    ]
+                }
+            });
+
+            // Add a symbol layer
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'points',
+                'layout': {
+                    'icon-image': 'custom-marker',
+                    // get the title name from the source's "title" property
+                    'text-field': ['get', 'title'],
+                    'text-font': [
+                        'Open Sans Semibold',
+                        'Arial Unicode MS Bold'
+                    ],
+                    'text-offset': [0, 1.25],
+                    'text-anchor': 'top'
+                }
+            });
+        }
+    );
 });
 
 
  
-
-
 // Change Map Style
 const layerList = document.getElementById('stylemenu');
 const inputs = layerList.getElementsByTagName('input');
@@ -791,6 +860,8 @@ function buildUrl(url, parameters){
     }
     return url;
 }
+
+
 
 // Update DataPoints based on Filters (Ajax inbuilt)
 function updateData(){
@@ -959,6 +1030,9 @@ function getTopPrediction(id){
             document.getElementById('predictionText4').innerHTML = predicted_events_weights[3];
             document.getElementById('predictionText5').innerHTML = predicted_events_weights[4];
 
+
+            // var getNearPlaces = getNearPlaces()
+
         }
         else{
             console.log("Not Working");   
@@ -967,6 +1041,31 @@ function getTopPrediction(id){
     xhr.send();
     updateData();
 }
+
+// function getNearPlaces(lat, long){
+//     var lat = lat;
+//     var long = long;      
+//     var parameter = {
+//         lat: lat
+//         long: long
+//     }
+//     const xhr = new XMLHttpRequest();
+//     xhr.responseType = 'json';
+//     var url = buildUrl('/map/getNearPlaces/', parameter);
+//     // console.log(url);
+//     xhr.open("GET", url, true);
+//     xhr.onprogress = function(){
+//         console.log("gatting nearby places");
+//     }   
+//     xhr.onload = function(){
+//         if (this.status == 200){            
+//             var jsonResponse = xhr.response;   
+//             var data = jsonResponse['data'];
+//             return data;
+//         }
+//     }
+//     xhr.send();
+// }
 
 
 // Get Predicted Points and Show on Map (Ajax inbuilt)

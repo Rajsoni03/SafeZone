@@ -9,6 +9,7 @@ import pandas as pd
 import tensorflow as tf
 import os
 import requests
+import json
 
  
 model = tf.keras.models.load_model(os.path.join(os.getcwd(), os.path.join('staticfiles','model.h5'))) # load .h5 Model
@@ -472,7 +473,7 @@ def getTopPrediction(request):
 	timeOfpatrolling	= int(request.GET.get('timeOfpatrolling'))
 	weekDay	 			= int(request.GET.get('weekDay'))	
 
-	policeStation 	= None if policeStation == 'All' else policeStation
+	policeStation 	    = None if policeStation == 'All' else policeStation
 
 	if policeStation == "PS1":
 		PS1, PS2, PS3, PS4 = 1,0,0,0
@@ -494,9 +495,8 @@ def getTopPrediction(request):
 	top_predicted_events_weights = []
 	for n_event in range(5):
 		top_predicted_events.append(Event_index[predictedEventIndex[n_event]])
-		top_predicted_events_weights.append(str(predictedEvent[0][predictedEventIndex[n_event]]))
+		top_predicted_events_weights.append(str(predictedEvent[0][predictedEventIndex[n_event]] * 100)+" %")
 		print("Event Type:", Event_index[predictedEventIndex[n_event]], "\nProbability:", predictedEvent[0][predictedEventIndex[n_event]], '\n')
-
 
 	data = {
 		"predicted_events": top_predicted_events,
@@ -505,42 +505,44 @@ def getTopPrediction(request):
 	return JsonResponse(data=data)
 
 def getNearPlaces(request):
-# 	lat = 26.876
-# 	long = 81.055
-# 	limit = 50
 
-# 	url = "https://api.foursquare.com/v3/places/nearby?ll={}%2C{}&limit={}".format(lat, long, limit)
+	# Get Request Data 
+	lat 	= request.GET.get('lat')
+	long	= request.GET.get('long')
+	limit = 10
 
-# 	headers = {
-# 	    "Accept": "application/json",
-# 	    "Authorization": "fsq3AJY1p0lkNo9/6QWGrb7R1nZANvJeGz3EOnG9e8g39lA="
-# 	}
+	url = "https://api.foursquare.com/v3/places/nearby?ll={}%2C{}&limit={}".format(lat, long, limit)
 
-# 	response = requests.request("GET", url, headers=headers)
-# 	data = json.loads(json.dumps(json.JSONDecoder().raw_decode(response.text)))
+	headers = {
+	    "Accept": "application/json",
+	    "Authorization": "fsq3AJY1p0lkNo9/6QWGrb7R1nZANvJeGz3EOnG9e8g39lA="
+	}
 
-# 	list_data = data[0]['results']
+	response = requests.request("GET", url, headers=headers)
+	data = json.loads(json.dumps(json.JSONDecoder().raw_decode(response.text)))
 
-# 	data = {
-# 		'categories' : [],
-# 		'name' : [],
-# 		'distance' : []
-# 	}
+	list_data = data[0]['results']
 
-# 	for i in list_data:
-# 	    try:
-# 	        categories = i['categories'][0]['name']
-# 	        name = i['name']
-# 	        distance = i['distance']
-			
-# 			data['categories'] = 
-# 			data['name'] = 
-# 			data['distance'] = 
-# 	    except:
-# 	        pass
+	data = {
+		'categories' : [],
+		'name' : [],
+		'distance' : []
+	}
 
-	
+	for i in list_data:
+		try:	
+			categories = i['categories'][0]['name']
+			name = i['name']
+			distance = i['distance']
+
+			data['categories'].append(categories)
+			data['name'].append(name)
+			data['distance'].append(distance)
+		except:
+			pass
+
 	params = {
 		'status' : True,
+		'data' : data,
 	}
 	return JsonResponse(params)
